@@ -94,15 +94,15 @@ function fibonacciOptimized(n){
     if(n===0) return 0
     if(n===1) return 1
 
-    let prev = 0
-    let cont = 1
+    let previous = 0
+    let current = 1
 
     for(let i = 2; i<=n; i++){
-        let next = prev + cont
-        prev = cont
-        cont = next
+        let next = previous + current
+        previous = current
+        current = next
     }
 
-    return cont
-}
+    return current
+} //solved
 console.log(fibonacciOptimized(5))

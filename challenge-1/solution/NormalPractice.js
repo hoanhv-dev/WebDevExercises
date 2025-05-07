@@ -2,37 +2,36 @@
 // Bài 1
 
 function filterGreaterThenTen(arr){
-    const betterThenTen = arr.filter(items => items>10)
-    console.log(betterThenTen)
+    return arr.filter(items => items > 10) //solved
 }
 
-filterGreaterThenTen([5,12,16,4])
+console.log(filterGreaterThenTen([5,12,16,4]))
 
 // Bài 2
 
 function tripleArray(arr){
-    const triple = arr.map(items => items *3)
-    console.log(triple)
-}
+    return arr.map(items => items * 3)
+} 
 
-tripleArray([1,2,3])
+console.log(tripleArray([1,2,3]))
 
 // Bài 3
 
 function printIndexed(arr){
-    const print = arr.forEach((item, index)=>{
-        console.log("Index " + index +": "+ item)
+    let result =[]
+    arr.forEach((item, index)=>{
+        result.push('Index ${index}: ${item}')
     })
-}
+} //solved
 
-printIndexed(['a','b'])
+console.log(printIndexed(['apple','banana'])) //change to array
 
 // Bài 4
 
 function findMax(arr){
     if(arr.length==0) return undefined
-    let max = []
-    for(let i = 1; i<arr.length; i++){
+    let max = arr[0] //solved
+    for(let i = 1; i<arr.length; i++){ //solved
         if(arr[i]>max){
             max=arr[i]
         }
@@ -82,12 +81,8 @@ console.log(countPrimes([1,2,5,7,6,11]))
 // Bài 7
 
 function stringToArray(str){
-    const arr = []
-    for(let i = 0; i<str.length;i++){
-        arr.push(str[i])
-    }
-    return arr.map(char => char)
-}
+    return str.split('').map(char => char)
+} //solve
 
 console.log(stringToArray('hello'))
 
