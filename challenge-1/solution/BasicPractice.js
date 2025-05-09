@@ -2,29 +2,31 @@
 // Bài 1
 
 function isPositive(num) {
-  return num > 0; //solved
+  if (typeof num !== "number") {
+    return "Input must be a number";
+  }
+  return num > 0; 
 }
+
 console.log(isPositive(5));
 
 // Bài 2
-
 function square(num) {
   if (typeof num !== "number") {
     return "Input must be a number";
-  } //solved
-
-  if (num < 0) {
-    num = -num;
-  } //solved
+  } 
   return num * num;
 }
 
-console.log(square(4));
+console.log(square(-4));
 
 // Bài 3
 
 function printNumbers(start, end) {
-  let result = [];
+  if (typeof start !== "number" || typeof end !== "number") {
+    return "Input must be a number";
+  }
+  const result = [];
   for (let i = start; i <= end; i++) {
     result.push(i);
   }
@@ -36,23 +38,34 @@ console.log(printNumbers(1, 10)); // solve
 // Bài 4
 
 function sumOdd(n) {
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
+  if (n < 1) {
+    return "Do not have any odd numbers";
+  }
+
   let sum = 0;
-  let end = n > 0 ? n : -n;
-  for (let i = 1; i <= end; i++) {
+  for (let i = 1; i <= n; i++) {
     if (i % 2 !== 0) {
+      // Check if number is odd
       sum += i;
     }
   }
 
-  return sum; //solved
-} //added ternary operator for the end is negative number
+  return sum;
+}
 
 console.log(sumOdd(9));
 
 // Bài 5
 
 function divisibleByFive(num) {
-  return num % 5 === 0; //solved
+  if (typeof num !== "number") {
+    return "Input must be a number";
+  }
+  return Boolean(num % 5);
 }
 
 console.log(divisibleByFive(11));
@@ -60,30 +73,36 @@ console.log(divisibleByFive(11));
 // Bài 6
 
 function countEven(n) {
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
   let count = 0;
   let i = 1;
   while (i <= n) {
-    if (i % 2 === 0) {
-      count += 1;
-    }
+    i % 2 && (count += 1);
     i += 1;
   }
 
   return count;
-} // the requirement is using while loop :(((
+}
 
 console.log(countEven(10));
 
 // Bài 7
 
 function printDivisibleByThree(n) {
-  let arr = [];
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
+  const arr = [];
   for (let i = 1; i <= n; i++) {
     if (i % 3 === 0) {
       arr.push(i);
     }
   }
-  return arr; //added array
+  return arr;
 }
 
 console.log(printDivisibleByThree(10));
@@ -91,79 +110,96 @@ console.log(printDivisibleByThree(10));
 // Bài 8
 
 function isLeapYear(year) {
-  if (year % 400 === 0) {
-    return true;
-  } else if (year % 100 === 0) {
-    return false;
-  } else if (year % 4 === 0) {
-    return true;
-  } else {
-    return false;
+  if (typeof year !== "number") {
+    return "Input must be a number";
   }
-} //solved
+
+  if (year < 0) {
+    return "Input must be a positive number";
+  }
+
+  return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+}
 
 console.log(isLeapYear(2022));
 
 // Bài 9
 
 function ageCategory(age) {
+  if (typeof age !== "number") {
+    return "Input must be a number";
+  }
+
+  if (age < 0) {
+    return "Input must be a positive number";
+  }
+
   switch (true) {
     case age < 13:
       return "Trẻ em";
       break;
-    case age >= 13 && age <= "18":
+    case age <= 18:
       return "Thanh niên";
       break;
     case age > 18:
       return "Người lớn";
   }
-} //solved
+}
 
 console.log(ageCategory(14));
 
 // Bài 10
 
 function factorial(n) {
-  let result = 1;
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
   if (n < 0) {
     return "Do not have any factorial for negative numbers";
   }
+
+  let result = 1;
   for (let i = 1; i <= n; i++) {
     result *= i;
   }
 
   return result;
-} //solved
+}
 
 console.log(factorial(-5));
 
 // Bài 11
 function isVowel(char) {
-  var char;
-  if (
-    char === "u" ||
-    char === "e" ||
-    char === "o" ||
-    char === "a" ||
-    char === "i" ||
-    char === "U" ||
-    char === "E" ||
-    char === "O" ||
-    char === "A" ||
-    char === "I"
-  ) {
-    return true;
-  } else {
-    return false;
+  if (typeof char !== "string") {
+    return "Input must be a string";
   }
-} //solved
+
+  return "ueoaiUeOAi".includes(char);
+
+  // if (
+  //   char === "u" ||
+  //   char === "e" ||
+  //   char === "o" ||
+  //   char === "a" ||
+  //   char === "i" ||
+  //   char === "U" ||
+  //   char === "E" ||
+  //   char === "O" ||
+  //   char === "A" ||
+  //   char === "I"
+  // ) {
+  //   return true;
+  // }
+  // return false;
+}
 
 console.log(isVowel("e"));
 
 // Bài 12
 
 function sumArray(arr) {
-  if (Array.isArray(arr) || arr.length === 0) {
+  if (!Array.isArray(arr) || arr.length === 0) {
     return 0;
   }
 
@@ -173,7 +209,7 @@ function sumArray(arr) {
   }
 
   return sum;
-} //solved
+}
 
 const number = [1, 2, 3, 4, 5];
 console.log(sumArray(number));
@@ -181,14 +217,18 @@ console.log(sumArray(number));
 // Bài 13
 
 function printReverse(n) {
-  let arr = [];
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
+  const arr = [];
   let i = n;
   while (i >= 1) {
     arr.push(i);
     i--;
   }
   return arr;
-} //solved
+}
 
 console.log(printReverse(5));
 
@@ -201,23 +241,22 @@ function isPerfectNumber(num) {
 
   let sum = 0;
   for (let i = 1; i < num; i++) {
-    if (num % i == 0) {
+    if (num % i === 0) {
       sum += i;
     }
   }
   return sum === num;
-} //solved
+}
 
 console.log(isPerfectNumber(6));
 
 // Bài 15
 
 function celsiusToFahrenheit(c) {
-  let f = 0;
-  if (c > 0) {
-    f = (c * 9) / 5 + 32;
-    return f;
+  if (typeof c !== "number") {
+    return "Input must be a number";
   }
+  return (c * 9) / 5 + 32;
 }
 
 console.log(celsiusToFahrenheit(1));
@@ -225,47 +264,60 @@ console.log(celsiusToFahrenheit(1));
 // Bài 16
 
 function countChar(str) {
+  if (typeof str !== "string") {
+    return "Input must be a string";
+  }
+
   let count = 0;
   for (let i = 0; i < str.length; i++) {
-    if (str[i] !== " ") {
-      count++;
-    }
+    (str[i] !== " ") && (count += 1);
   }
   return count;
-} //solved
+}
 
 console.log(countChar("hello Tom"));
 
 // Bài 17
 
 function printTriangle(n) {
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
+  const result = [];
   for (let i = 1; i <= n; i++) {
     let row = "";
     for (let j = 1; j <= i; j++) {
       row += j + " ";
     }
-    return row;
+    result.push(row.trim());
   }
+  return result;
 }
 console.log(printTriangle(3));
 
 // Bài 18
 
 function isNegative(num) {
+  if (typeof num !== "number") {
+    return "Input must be a number";
+  }
   return num < 0;
-} //solved
+}
 
 console.log(isNegative(-5));
 
 // Bài 19
 
 function sumDivisibleBySeven(n) {
+  if (typeof n !== "number") {
+    return "Input must be a number";
+  }
+
   let sum = 0;
   let i = 1;
   while (i <= n) {
-    if (i % 7 == 0) {
-      sum += i;
-    }
+    (i % 7 === 0) && (sum += i);
     i++;
   }
 
@@ -277,14 +329,18 @@ console.log(sumDivisibleBySeven(14));
 // Bài 20
 
 function dayType(day) {
-  switch (true) {
-    case day >= 1 && day <= 5:
-      return "Ngày thường";
-      break;
-    case day >= 6 && day <= 7:
-      return "Cuối tuần";
-      break;
+  if (typeof day !== "number" || day <= 0) {
+    return "Input must be a positive number";
   }
-} //solved
 
-console.log(dayType("7"));
+  switch (true) {
+    case day <= 5:
+      return "Ngày thường";
+    case day <= 7:
+      return "Cuối tuần";
+    default:
+      return "Ngày không hợp lệ";
+  }
+}
+
+console.log(dayType(7));
