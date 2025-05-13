@@ -5,31 +5,36 @@ function drawDiamond(n) {
     return "Please enter the number";
   }
 
-  if (n <= 1) {
-    return "Please enter the number greater than 3";
-  }
-  const upperPart = [];
-  for (let i = 0; i < n; i++) {
-    const spaces = " ".repeat(n - i - 1);
-    const stars = "*".repeat(2 * i + 1);
-    upperPart.push(spaces + stars);
+  if (n <= 0) {
+    return "Please enter a positive number";
   }
 
-  const lowerPart = [];
-  // Trừ 1 dòng chung
-  for (let i = n - 2; i >= 0; i--) {
-    const spaces = " ".repeat(n - i - 1);
-    const stars = "*".repeat(2 * i + 1);
-    lowerPart.push(spaces + stars);
+  const result = [];
+
+  // Function to create a string of characters by for loop
+  function buildChar(char, count) {
+    let str = "";
+    for (let i = 0; i < count; i++) {
+      str += char;
+    }
+    return str;
   }
 
-  return upperPart.join("\n") + "\n" + lowerPart.join("\n");
+  // Draw the diamond
+  for (let i = -n + 1; i < n; i++) {
+    const row = Math.abs(i);
+    const spaces = buildChar(" ", row);
+    const stars = buildChar("*", 2 * (n - row) - 1);
+    result.push(spaces + stars);
+  }
+
+  return result.join("\n");
 }
 
 console.log(drawDiamond(4));
 
 // Bài 7
-
+// Recheck
 function factorial(num) {
   if (typeof num !== "number") {
     return "Please enter the number";
@@ -59,13 +64,17 @@ function drawPascalTriangle(n) {
       row.push(factorial(i) / (factorial(j) * factorial(i - j)));
     }
 
-    result += " ".repeat(n - i - 1) + row.join(" ") + "\n";
+    // Generate spaces using for loop
+    let spaces = "";
+    for (let k = 0; k < n - i - 1; k++) {
+      spaces += " ";
+    }
+    result += spaces + row.join(" ") + "\n";
   }
   return result;
 }
 
-console.log(drawPascalTriangle(4));
-
+console.log(drawPascalTriangle(6));
 // Bài 8: Mở rộng thuật toán: Xoắn ốc hình chữ nhật theo chiều từ phải sang trái
 
 function drawSpiral(m, n) {
@@ -77,8 +86,13 @@ function drawSpiral(m, n) {
     return "Please input the negative value for m and n";
   }
 
-  const matrix = Array.from({ length: m }, () => Array(n).fill(0));
+  // const matrix = Array.from({length: m}, () => Array(n).fill(0));
 
+  const matrix = []; // create an empty matrix
+  for (let i = 0; i < m; i++) {
+    matrix.push(Array(n).fill(0));
+  }
+  
   let top = 0;
   let bottom = m - 1;
   let left = 0;
@@ -117,7 +131,22 @@ function drawSpiral(m, n) {
     }
   }
 
-  return matrix.map((row) => row.join(" ")).join("\n");
+  // return matrix.map((row) => row.join(" ")).join("\n"); //callback function tạo array và join thành chuỗi
+
+  let result = "";
+  for (let i = 0; i < m; i++) {
+    let row = matrix[i];
+    let rowString = "";
+
+    for(let j= 0; j < row.length; j++) {
+      rowString += row[j];
+      if(j < row.length - 1) {
+        rowString += " "; 
+      }
+    }
+    result += rowString + "\n";
+  }
+  return result;
 }
 
 console.log(drawSpiral(3, 5));
@@ -166,24 +195,32 @@ function drawChristmasTree(n) {
   }
 
   const tree = [];
-  
+
+  // Function to create a string of characters by for loop
+  function buildChar(char, count) {
+    let str = "";
+    for (let i = 0; i < count; i++) {
+      str += char;
+    }
+    return str;
+  }
+
+  // Draw the tree
   for (let i = 0; i < n; i++) {
-    // spaces là khoảng trắng từ rìa tính vào
-    const spaces = " ".repeat(n - i - 1);
-    // stars là số dấu "*" tương ứng với số dòng
-    const stars = "*".repeat(2 * i + 1);
+    const spaces = buildChar(" ", n - i - 1);
+    const stars = buildChar("*", 2 * i + 1);
     tree.push(spaces + stars);
   }
-  
-  // trunkSpaces là khoảng trắng từ rìa tính vào
-  const trunkSpaces = " ".repeat(n - 1);
-  tree.push(trunkSpaces + "#");
-  tree.push(trunkSpaces + "#");
+
+  // Draw the tree (2 lines "#")
+  const trunk = buildChar(" ", n - 1) + "#";
+  tree.push(trunk);
+  tree.push(trunk);
 
   return tree.join("\n");
 }
-console.log(drawChristmasTree(5));
 
+console.log(drawChristmasTree(5));
 // Bài 11
 
 function drawHollowSquare(n) {
@@ -193,10 +230,16 @@ function drawHollowSquare(n) {
   let result = "";
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
-      // 4 điều kiện đầu dùng để vẽ hình vuông, i === j dùng để vẽ đường chéo
-      if (i === 0 || i === n - 1 || j === 0 || j === n - 1 || i === j) {
+      //Condition for square
+      if (i === 0 || i === n - 1 || j === 0 || j === n - 1) {
         result += "*";
-      } else {
+      }
+      //Condition for diagonal
+      else if(i === j){
+        result += "*";
+      }
+      //Fill space
+      else {
         result += " ";
       }
     }
@@ -207,31 +250,40 @@ function drawHollowSquare(n) {
 console.log(drawHollowSquare(5));
 
 // Bài 12
-
+// Recheck
 function drawHollowTriangle(n) {
   if (typeof n !== "number") {
-    return "Please enter the number";
+    return "Please enter a number";
   }
 
   const triangle = [];
-  for(let i = 0; i < n; i++) {
-    const spaces = " ".repeat(n - i - 1);
-    // Bắt đầu với 1 "*"
+
+  // Create a string of characters by for loop
+  function buildChar(char, count) {
+    let str = "";
+    for (let i = 0; i < count; i++) {
+      str += char;
+    }
+    return str;
+  }
+
+  for (let i = 0; i < n; i++) {
+    const spaces = buildChar(" ", n - i - 1);
+
     if (i === 0) {
-      triangle.push(spaces + "*");
-    }  
-    // Nếu là dòng cuối thì fill full "*"
-    else if (i === n - 1) {
-      triangle.push(spaces + "*".repeat(2 * i + 1));
-    } 
-    // Nếu không phải dòng đầu và cuối thì in dấu "*" ở đầu và cuối dòng, ở giữa là khoảng trắng
-    else {
-      const stars = "*" + " ".repeat(2 * i - 1) + "*";
-      triangle.push(spaces + stars);
+      triangle.push(spaces + "*"); // First row
+    } else if (i === n - 1) {
+      const fullStars = buildChar("*", 2 * n - 1);
+      triangle.push(fullStars); // Last row
+    } else {
+      const innerSpaces = buildChar(" ", 2 * i - 1);
+      triangle.push(spaces + "*" + innerSpaces + "*"); // Middle row
     }
   }
+
   return triangle.join("\n");
 }
+
 console.log(drawHollowTriangle(5));
 
 // Bài 13
@@ -241,12 +293,25 @@ function drawZigzag(n) {
     return "Please enter the number";
   }
 
-  return Array.from({ length: n }, (_, i) => {
-    // Nếu số dòng chẵn thì không có khoảng trắng từ rìa tính vào
-    // Nếu số dòng lẻ thì có khoảng trắng từ rìa tính vào
-    const spaces = " ".repeat(i % 2 === 0 ? 0 : 2);
-    return spaces + "*";
-  }).join("\n");
+    // return Array.from({ length: n }, (_, i) => {
+  //   // Nếu số dòng chẵn thì không có khoảng trắng từ rìa tính vào
+  //   // Nếu số dòng lẻ thì có khoảng trắng từ rìa tính vào
+  //   const spaces = " ".repeat(i % 2 === 0 ? 0 : 2);
+  //   return spaces + "*";
+  // }).join("\n");
+
+  let result = "";
+  for (let i = 0; i < n; i++) {
+    // Tạo khoảng trắng cho dòng lẻ
+    let spaces = "";
+    if (i % 2 !== 0) {
+      for (let j = 0; j < 2; j++) {
+        spaces += " ";
+      }
+    }
+    result += spaces + "*\n";
+  }
+  return result;
 }
 console.log(drawZigzag(10));
 
@@ -258,46 +323,57 @@ function drawNumberGrid(n) {
     return "Please enter the number";
   }
 
-  const matrix = []; // tạo ma trận rỗng
-  let num = 1; // tạo biến bắt đầu
+  const matrix = []; // create an empty matrix
+  let num = 1; // create a variable to start
 
   for (let i = 0; i < n; i++) {
-    const row = []; // tạo hàng mảng của ma trận
+    const row = []; // create a row of the matrix
     for (let j = 0; j < n; j++) {
-      //Nếu số nhỏ hơn 10 thì thêm 0 vào trước số đó
+      //If the number is less than 10, add 0 in front of the number
       row.push(num < 10 ? "0" + num : num);
       num++;
     }
     matrix.push(row);
   }
 
-  // Chuyển ma trận thành chuỗi và in ra màn hình
+  // Convert the matrix to a string and print it on the screen
   return matrix.map(row => row.join(" ")).join("\n");
 }
 
 console.log(drawNumberGrid(4));
 
 // Bài 15
-// Ta thấy số sao tương ứng với số dòng, khoảng trắng thì tương ứng với 2(n-số sao)
-
+// The number of stars is equal to the number of rows, the space is equal to 2(n-number of stars)
+// Recheck
 function drawButterfly(n) {
-    let upperWing = "";
-    let lowerWing = "";
+  let result = "";
 
-    // Phần trên thì chạy từ 1 đến n
-    for (let i = 1; i <= n; i++) {
-        const stars = '*'.repeat(i);
-        const spaces = ' '.repeat(2 * (n - i));
-        upperWing += stars + spaces + stars + "\n";
-        
-    }
-    // Phần dưới thì chạy từ n đến 1
-    for (let i = n; i >= 1; i--) {
-        const stars = '*'.repeat(i);
-        const spaces = ' '.repeat(2 * (n - i));
-        lowerWing += stars + spaces + stars + "\n";
-    }
-    return upperWing + lowerWing;
+  // Function to create a part of the butterfly
+  function makeLine(i) {
+      let stars = "";
+      for (let j = 0; j < i; j++) {
+          stars += "*";
+      }
+
+      let spaces = "";
+      for (let j = 0; j < 2 * (n - i); j++) {
+          spaces += " ";
+      }
+
+      return stars + spaces + stars + "\n";
+  }
+
+  // Top part
+  for (let i = 1; i <= n; i++) {
+      result += makeLine(i);
+  }
+
+  // Bottom part
+  for (let i = n; i >= 1; i--) {
+      result += makeLine(i);
+  }
+
+  return result;
 }
 
 console.log(drawButterfly(3));
