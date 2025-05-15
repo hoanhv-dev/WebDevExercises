@@ -1,5 +1,14 @@
 // Bài 6
 
+// Function to create a string of characters by for loop
+function buildChar(char, count) {
+  let str = "";
+  for (let i = 0; i < count; i++) {
+    str += char;
+  }
+  return str;
+}
+
 function drawDiamond(n) {
   if (typeof n !== "number") {
     return "Please enter the number";
@@ -11,14 +20,6 @@ function drawDiamond(n) {
 
   const result = [];
 
-  // Function to create a string of characters by for loop
-  function buildChar(char, count) {
-    let str = "";
-    for (let i = 0; i < count; i++) {
-      str += char;
-    }
-    return str;
-  }
 
   // Draw the diamond
   for (let i = -n + 1; i < n; i++) {
@@ -56,17 +57,39 @@ function factorial(num) {
 }
 
 function drawPascalTriangle(n) {
-  let result = "";
+  if (typeof n !== "number") {
+    return "Please enter the number";
+  }
+  if (n <= 0) {
+    return "Please enter the positive number";
+  }
 
+  // Find the max width of any number in the triangle
+  let maxWidth = 0;
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j <= i; j++) {
+      const num = factorial(i) / (factorial(j) * factorial(i - j));
+      const numStr = num.toString();
+      const numWidth = numStr.length;
+      if (numWidth > maxWidth) {
+        maxWidth = numWidth;
+      }
+    }
+  }
+
+  let result = "";
   for (let i = 0; i < n; i++) {
     let row = [];
     for (let j = 0; j <= i; j++) {
-      row.push(factorial(i) / (factorial(j) * factorial(i - j)));
+      const num = factorial(i) / (factorial(j) * factorial(i - j));
+      // Pad each number to the same width
+      const numStr = num.toString();
+      const paddedNumStr = numStr.padStart(maxWidth);
+      row.push(paddedNumStr);
     }
 
-    // Generate spaces using for loop
     let spaces = "";
-    for (let k = 0; k < n - i - 1; k++) {
+    for (let k = 0; k < (n - i - 1) * ((maxWidth + 1) / 2); k++) {
       spaces += " ";
     }
     result += spaces + row.join(" ") + "\n";
@@ -74,7 +97,8 @@ function drawPascalTriangle(n) {
   return result;
 }
 
-console.log(drawPascalTriangle(6));
+console.log(drawPascalTriangle(10));
+
 // Bài 8: Mở rộng thuật toán: Xoắn ốc hình chữ nhật theo chiều từ phải sang trái
 
 function drawSpiral(m, n) {
@@ -185,6 +209,18 @@ function drawCross(n) {
 console.log(drawCross(5));
 
 // Bài 10
+
+
+// Function to create a string of characters by for loop
+function buildChar(char, count) {
+  let str = "";
+  for (let i = 0; i < count; i++) {
+    str += char;
+  }
+  return str;
+}
+
+
 function drawChristmasTree(n) {
   if (typeof n !== "number") {
     return "Please enter the natural number";
@@ -195,15 +231,6 @@ function drawChristmasTree(n) {
   }
 
   const tree = [];
-
-  // Function to create a string of characters by for loop
-  function buildChar(char, count) {
-    let str = "";
-    for (let i = 0; i < count; i++) {
-      str += char;
-    }
-    return str;
-  }
 
   // Draw the tree
   for (let i = 0; i < n; i++) {
@@ -221,6 +248,8 @@ function drawChristmasTree(n) {
 }
 
 console.log(drawChristmasTree(5));
+
+
 // Bài 11
 
 function drawHollowSquare(n) {
@@ -230,14 +259,18 @@ function drawHollowSquare(n) {
   let result = "";
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
-      //Condition for square
-      if (i === 0 || i === n - 1 || j === 0 || j === n - 1) {
+      //Condition for upper and lower edge
+      if (i === 0 || i === n - 1) {
         result += "*";
-      }
+      } 
+      //Condition for left and right edge
+      else if (j === 0 || j === n - 1) {
+        result += "*";
+      } 
       //Condition for diagonal
-      else if(i === j){
+      else if (i === j) {
         result += "*";
-      }
+      } 
       //Fill space
       else {
         result += " ";
@@ -302,7 +335,7 @@ function drawZigzag(n) {
 
   let result = "";
   for (let i = 0; i < n; i++) {
-    // Tạo khoảng trắng cho dòng lẻ
+    // Create spaces for odd lines
     let spaces = "";
     if (i % 2 !== 0) {
       for (let j = 0; j < 2; j++) {

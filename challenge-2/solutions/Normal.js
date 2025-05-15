@@ -10,8 +10,8 @@ function drawRightTriangle(n) {
   }
 
   let result = "";
-  for (let i = 0; i < n; i++) {
-    for (let j = 0; j < i; j++) {
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= i; j++) {
       result += "*";
     }
     result += "\n";
@@ -21,7 +21,7 @@ function drawRightTriangle(n) {
 }
 
 console.log("Right Triangle");
-console.log(drawRightTriangle(4));
+console.log(drawRightTriangle(5));
 
 // Bài 2
 
@@ -93,9 +93,17 @@ function drawHollowRectangle(w, h) {
   let result = "";
   for (let rowIndex = 0; rowIndex < h; rowIndex++) {
     for (let colIndex = 0; colIndex < w; colIndex++) {
-      if(rowIndex === 0 || rowIndex === h - 1 || colIndex === 0 || colIndex === w - 1) {
+      //Condition for upper and lower edge
+      if(rowIndex === 0 || rowIndex === h - 1)  {
         result += "*";
       }
+
+      //Condition for left and right edge
+      else if (colIndex === 0 || colIndex === w - 1) {
+        result += "*";
+      }
+      
+      //Fill space
       else {
         result += " ";
       }
