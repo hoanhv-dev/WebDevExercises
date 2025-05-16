@@ -1,13 +1,20 @@
 // Exercise 1
 function kthLargestReverse(arr, k) {
     if (!Array.isArray(arr) || typeof k !== "number") {
-      return "Please enter valid input";
+        return "Please enter valid input";
     }
-  
+
+    // Check all numbers are positive integers
+    for (let i = 0; i < arr.length; i++) {
+        if (typeof arr[i] !== "number" || arr[i] <= 0 || !Number.isInteger(arr[i])) {
+            return "All elements in the array must be positive integers";
+        }
+    }
+
     if (k <= 0 || k > arr.length) {
-      return "k is out of range";
+        return "k is out of range";
     }
-  
+
     // Reverse each number in the array
     const reversedNumbers = [];
     for (let i = 0; i < arr.length; i++) {
@@ -19,7 +26,7 @@ function kthLargestReverse(arr, k) {
         }
         reversedNumbers.push(reversed);
     }    
-  
+
     // Sort in descending order
     for (let i = 0; i < reversedNumbers.length; i++) {
         for (let j = i + 1; j < reversedNumbers.length; j++) {
@@ -28,22 +35,29 @@ function kthLargestReverse(arr, k) {
             }
         }
     }
-  
+
     // Return the kth largest number (index k-1)
     return reversedNumbers[k - 1];
-  }
+}
 
   console.log("Exercise 1");
 
-  console.log(kthLargestReverse([123, 456, 789], 2)); 
+  console.log(kthLargestReverse([20, 100, 200], 2)); 
   console.log(kthLargestReverse([123, 456, 798], 1)); 
   console.log(kthLargestReverse([123, 456, 789], 3)); 
 
   // Exercise 2
 
-  function maxDigitSumSubstring(s, k) {
+function maxDigitSumSubstring(s, k) {
     if (typeof s !== "string" || typeof k !== "number") {
         return "Please enter valid input";
+    }
+
+    for (let i = 0; i < s.length; i++) {
+        const check = s.charCodeAt(i);
+        if (check < 48 || check > 57) {
+            return "Input string must contain only digits";
+        }
     }
     
     if (k <= 0 || k > s.length) {
@@ -53,27 +67,22 @@ function kthLargestReverse(arr, k) {
     let maxSum = 0;
     let maxSubstring = "";
 
-    const stringLength = s.length;
-
-    for (let i = 0; i <= stringLength - k; i++) {
-        const substring = s.substring(i, i + k);
+    for (let i = 0; i <= s.length - k; i++) {
         let sum = 0;
-        for (let j = 0; j < substring.length; j++) {
-            sum += parseInt(substring[j]);
+        for (let j = 0; j < k; j++) {
+            sum += parseInt(s[i + j]);
         }
         if (sum > maxSum) {
             maxSum = sum;
-            maxSubstring = substring;
+            maxSubstring = s.substr(i, k);
         }
     }
 
     return maxSubstring;
 }
 
-console.log("Exercise 2");
-
-console.log(maxDigitSumSubstring("123456789", 3));
-console.log(maxDigitSumSubstring("123789456", 3));
+console.log(maxDigitSumSubstring("123456789", 3));      
+console.log(maxDigitSumSubstring("1237%%%89456", 3));  
 
 // Exercise 3
 
