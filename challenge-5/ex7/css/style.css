@@ -1,0 +1,139 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #fff;
+    color: #333;
+}
+
+.container {
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.top-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.text-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    min-width: 300px;
+    max-width: 50%;
+}
+
+.text-content h1 {
+    display: flex;
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.text-content p {
+    display: flex;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.text-content .btn {
+    background-color: #333;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+.list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    flex: 1;
+    min-width: 300px;
+    max-width: 50%;
+    align-items: flex-end;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.list-item h3 {
+    display: flex;
+}
+
+.icon {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.bottom-cards-section {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.card {
+    min-height: 200px;
+    color: white;
+    font-size: 0.95rem;
+    padding: 20px;
+    display: flex;
+    align-items: flex-end;
+    background-size: cover;
+    background-position: center;
+}
+
+.card:first-child {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;   
+}
+
+.card:last-child {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .top-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .text-content,
+    .list-grid {
+        max-width: 100%;
+        min-width: 100%;
+    }
+
+    .list-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bottom-cards-section {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cảd
+    
+}
