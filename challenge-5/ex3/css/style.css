@@ -1,0 +1,55 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 1rem;   
+    display: flex;
+    background-color: #fff;
+    flex-direction: column;
+  }
+  
+  .section {
+    max-width: 1800px;
+    margin: auto;
+  }
+  
+  .section h1 {
+    color: #252525;
+    font-family: Avenir;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 800;
+    line-height: 80px; /* 118.182% */
+  }
+  
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    gap: 1rem;
+  }
+  
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .card-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #00000084;
+  }
+  
+  .card-title {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #00000082;
+  }
+  
+  .card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 20px;
+  }
+  
