@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Snack Time</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --max-width-main-content: 1200px;
+        --badge-size: 110px;
+        --dark-color: #333;
+        --light-gray: #d6d6d6;
+        --light-blue: #d6eaf8;
+        --light-orange: #ffe5b4;
+        --light-pink: #fbe3f8;
+        --h1-size: 2.8rem;
+        --p-size: 1.1rem;
+        --h3-size: 1.2rem;
+        --gallery-width: 600px;
+        --gallery-height: 640px;
+        --img-height: 300px;
+        --img-border-color: #222;
+      }
+    }
+
+    @layer utilities {
+      .max-main-content {
+        max-width: var(--max-width-main-content);
+      }
+
+      .badge {
+        width: var(--badge-size);
+        height: var(--badge-size);
+      }
+
+      .text-h1 {
+        font-size: var(--h1-size);
+      }
+
+      .text-p {
+        font-size: var(--p-size);
+        color: #444;
+      }
+
+      .text-h3 {
+        font-size: var(--h3-size);
+        color: #222;
+      }
+
+      .border-color {
+        border-color: #b5b5b5;
+      }
+
+      .bg-dark {
+        background-color: var(--dark-color);
+      }
+
+      .bg-light-gray {
+        background-color: var(--light-gray);
+      }
+
+      .bg-light-blue {
+        background-color: var(--light-blue);
+      }
+
+      .bg-light-orange {
+        background-color: var(--light-orange);
+      }
+
+      .bg-light-pink {
+        background-color: var(--light-pink);
+      }
+
+      .img-snack {
+        height: var(--img-height);
+        border-color: var(--img-border-color);
+      }
+
+      .gallery-dimensions {
+        max-width: var(--gallery-width);
+        height: var(--gallery-height);
+      }
+
+      .box-shadow-light {
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans bg-white m-0 p-0">
+  <div class="max-main-content mx-auto flex gap-12 items-start justify-center py-10 px-6">
+    <!-- Left Content -->
+    <div class="flex flex-col gap-8 min-w-[320px] max-w-[480px]">
+      <div>
+        <h1 class="text-h1 font-bold text-gray-800 mb-5 leading-tight">Ready?<br/>Snack time!</h1>
+        <p class="text-p mb-7 leading-relaxed">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cursus imperdiet sed id elementum. Quam vel aliquam sit vulputate. Faucibus nec gravida ipsum pulvinar vel non.
+        </p>
+        <button class="text-white px-10 py-3 rounded-full bg-dark font-bold hover:bg-[#555] transition duration-200">
+          Get started
+        </button>
+      </div>
+
+      <!-- Badges -->
+      <div class="flex gap-6">
+        <div class="badge rounded-full flex flex-col items-center justify-center text-[1rem] text-[var(--dark-color)] border border-color text-center font-medium tracking-wide bg-light-blue">
+          <span>low calorie</span>
+          <span class="text-[1.7rem] mt-2">♥</span>
+        </div>
+        <div class="badge rounded-full flex flex-col items-center justify-center text-[1rem] text-[var(--dark-color)] border border-color text-center font-medium tracking-wide bg-light-orange">
+          <span>low calorie</span>
+          <span class="text-[1.7rem] mt-2">☀</span>
+        </div>
+        <div class="badge rounded-full flex flex-col items-center justify-center text-[1rem] text-[var(--dark-color)] border border-color text-center font-medium tracking-wide bg-light-pink">
+          <span>low calorie</span>
+          <span class="text-[1.7rem] mt-2">★</span>
+        </div>
+      </div>
+
+      <!-- Info Cards -->
+      <div class="flex gap-8 mt-3 bg-white border border-[var(--light-gray)] py-6 px-8 min-w-[200px] box-shadow-light rounded-[30px]">
+        <div class="info-card">
+          <h3 class="text-h3 font-semibold mb-2">Title</h3>
+          <p class="text-[0.98rem] text-[#666] m-0">Lorem ipsum dolor sit consectetur adipiscing</p>
+        </div>
+        <div class="info-card">
+          <h3 class="text-h3 font-semibold mb-2">Title</h3>
+          <p class="text-[0.98rem] text-[#666] m-0">Lorem ipsum dolor sit consectetur adipiscing</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Image Gallery -->
+    <div class="flex gap-5 justify-center items-stretch gallery-dimensions">
+      <div class="flex flex-col gap-5 justify-start">
+        <img src="./assets/snack3.jpg" alt="Snack 1" class="border img-snack w-full rounded-xl object-cover"/>
+        <img src="./assets/snack4.jpg" alt="Snack 2" class="border img-snack w-full rounded-xl object-cover"/>
+      </div>
+      <div class="flex flex-col gap-5 justify-end">
+        <img src="./assets/snack1.jpg" alt="Snack 3" class="border img-snack w-full rounded-xl object-cover"/>
+        <img src="./assets/snack2.jpg" alt="Snack 4" class="border img-snack w-full rounded-xl object-cover"/>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

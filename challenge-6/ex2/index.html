@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/style.css">
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style type="text/tailwindcss">
+        @theme {
+          --gap-between-2-parts: 200px;
+          --color-color-text: #2c1001;
+          --color-bg-button: #ffde81;
+          --color-bg-button-hover: #ffb700;
+          --color-stats-bg: #3a2920;
+          --minw-stat-width: 160px;
+          --shadow-color: 0 2px 12px rgba(0, 0, 0, 0.04);
+          --width-img-section: 400px;
+          --height-img-section: 500px;
+         
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+    <div class="flex p-10 justify-center gap-between-2-parts items-center flex-wrap">
+      <div class="pt-[180px] flex flex-col items-start gap-8 min-w-[350px] max-w-[480px]">
+        <!-- Left Section -->
+        <div class="heading">
+          <h1 class="text-color-text text-4xl leading-tight mb-5 font-bold">
+            Listen to yourself<br>Follow your heart
+          </h1>
+          <p class="text-color-text text-xl mb-5">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Faucibus in libero risus semper habitant arcu eget. Et integer facilisi eget.
+          </p>
+          <button class="mb-7 border-none py-3 px-6 text-base rounded-full cursor-pointer bg-bg-button text-color-text transition-all duration-300 ease-in-out hover:bg-bg-button-hover">Download the App</button>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="bg-stats-bg flex gap-8 mt-auto rounded-[22px]">
+          <div class="text-white pt-8 pr-9 pb-6 pl-9 min-w-stat-width flex gap-4 overflow-x-auto flex-col item-start shadow-color">
+            <div class="text-xl font-extrabold mb-2">4.9</div>
+            <hr class="w-9 h-1 bg-white border-none rounded-0.5">
+            <div class="text-sm text-white text-start opacity-80">Lorem ipsum dolor amet</div>
+          </div>
+          <div class="text-white pt-8 pr-9 pb-6 pl-9 min-w-stat-width flex gap-4 overflow-x-auto flex-col item-start shadow-color">
+            <div class="text-xl font-extrabold mb-2">876K</div>
+            <hr class="w-9 h-1 bg-white border-none rounded-0.5">
+            <div class="text-sm text-white text-start opacity-80">Lorem ipsum dolor amet</div>
+          </div>
+          <div class="text-white pt-8 pr-9 pb-6 pl-9 min-w-stat-width flex gap-4 overflow-x-auto flex-col item-start shadow-color">
+            <div class="text-xl font-extrabold mb-2">No.1</div>
+            <hr class="w-9 h-1 bg-white border-none rounded-0.5">
+            <div class="text-sm text-white text-start opacity-80">Lorem ipsum dolor amet</div>
+          </div>
+        </div>
+
+
+      <!-- Image Cards Section -->
+    </div>
+    <div class="relative w-img-section h-img-section">
+      <div class="absolute w-full h-full">
+        <!-- Background layers -->
+        <div class="absolute w-[240px] h-[361px] bg-[#3a2920] rotate-[22deg] z-[-1] left-[80px] top-[80px]"></div>
+        <div class="absolute w-[305px] h-[389px] bg-[#ffde82] z-[-1] right-[153px] top-[18px]"></div>
+
+        <!-- Decorative images -->
+        <img src="assets/Heart 1.png" alt="Heart" class="absolute top-[115px] left-[-23px] w-[250px] z-4 opacity-90" />
+        <img src="assets/Portal_white.png" alt="Portal_black" class="absolute top-[113px] left-[267px] w-[100px] rotate-[24deg] z-1" />
+        <img src="assets/Portal_white.png" alt="Portal_white" class="absolute top-[14px] left-[130px] w-[120px] h-[120px] z-1" />
+        <img src="assets/Star 1.png" alt="star1" class="absolute left-[-100px] top-[-22px] w-[90px]" />
+        <img src="assets/Star 2.png" alt="star2" class="absolute left-[244px] top-[460px] w-[90px]" />
+      </div>
+
+      <img src="assets/unsplash_N_xjrdKZPkw.png" alt="Phone" class="absolute right-[130px] top-[142px] w-[472px] h-[472px] z-10" />
+    </div>
+    <style>
+      @media (max-width: 900px) {
+        .container {
+          flex-direction: column;
+          align-items: center;
+          gap: 80px;
+        }
+      }
+    </style>
+</body>
+</html>

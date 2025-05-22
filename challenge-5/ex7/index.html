@@ -4,71 +4,84 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Design Think Solve</title>
-    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <section class="top-section">
-            <div class="text-content">
-                <h1>Design. Think. <br>Solve. Develop.</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni ratione rem dolores temporibus debitis excepturi eum, qui ducimus. Ut, harum.</p>
-                <button class="btn">Get started</button>
+<body class="bg-white text-gray-800">
+    <div class="p-10 max-w-[1200px] mx-auto">
+        <!-- Top Section -->
+        <section class="flex flex-wrap justify-between gap-10">
+            <div class="flex flex-col items-start gap-5 min-w-[300px] max-w-1/2">
+                <h1 class="text-5xl font-bold leading-tight">Design. Think. <br>Solve. Develop.</h1>
+                <p class="text-lg text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni ratione rem dolores temporibus debitis excepturi eum, qui ducimus. Ut, harum.</p>
+                <button class="bg-gray-800 text-white px-6 py-3 rounded-full text-base transition-colors duration-300 hover:bg-gray-700">Get started</button>
             </div>
 
-            <div class="list-grid">
-                <div class="list-item">
-                    <div class="icon"><img src="assets/Frame 14354.png" alt="icon"></div>
+            <div class="grid grid-cols-2 gap-7 flex-1 min-w-[300px] max-w-1/2 items-end">
+                <div class="flex items-center gap-7">
+                    <div class="w-[45px] h-[45px] rounded-lg flex justify-center items-center"><img src="assets/Frame 14354.png" alt="icon"></div>
                     <div>
-                        <h2>168</h2>
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis, iste?</p>
+                        <h2 class="text-xl font-semibold">168</h2>
+                        <p class="text-sm text-gray-600">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Reiciendis, iste?</p>
                     </div>
                 </div>
-                <div class="list-item">
-                    <div class="icon"><img src="assets/Frame 14354 (3).png" alt="icon"></div>
+                <div class="flex items-center gap-7">
+                    <div class="w-[45px] h-[45px] rounded-lg flex justify-center items-center"><img src="assets/Frame 14354 (3).png" alt="icon"></div>
                     <div>
-                        <h2>Title 1</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
+                        <h2 class="text-xl font-semibold">Title 1</h2>
+                        <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
                     </div>
                 </div>
-                <div class="list-item">
-                    <div class="icon"><img src="assets/Frame 14354 (1).png" alt="icon"></div>
+                <div class="flex items-center gap-7">
+                    <div class="w-[45px] h-[45px] rounded-lg flex justify-center items-center"><img src="assets/Frame 14354 (1).png" alt="icon"></div>
                     <div>
-                        <h2>425+</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit.</p>
+                        <h2 class="text-xl font-semibold">425+</h2>
+                        <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, impedit.</p>
                     </div>
                 </div>
-                <div class="list-item">
-                    <div class="icon"><img src="assets/Frame 14354 (4).png" alt="icon"></div>
+                <div class="flex items-center gap-7">
+                    <div class="w-[45px] h-[45px] rounded-lg flex justify-center items-center"><img src="assets/Frame 14354 (4).png" alt="icon"></div>
                     <div>
-                        <h2>Title 2</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
+                        <h2 class="text-xl font-semibold">Title 2</h2>
+                        <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
                     </div>
                 </div>
-                <div class="list-item">
-                    <div class="icon"><img src="assets/Frame 14354 (2).png" alt="icon"></div>
+                <div class="flex items-center gap-7">
+                    <div class="w-[45px] h-[45px] rounded-lg flex justify-center items-center"><img src="assets/Frame 14354 (2).png" alt="icon"></div>
                     <div>
-                        <h2>316</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, distinctio.</p>
+                        <h2 class="text-xl font-semibold">316</h2>
+                        <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error, distinctio.</p>
                     </div>
                 </div>
-
-
-
-                <div class="list-item">
-                    <div class="icon"><img src="assets/Frame 14354 (5).png" alt="icon"></div>
+                <div class="flex items-center gap-7">
+                    <div class="w-[45px] h-[45px] rounded-lg flex justify-center items-center"><img src="assets/Frame 14354 (5).png" alt="icon"></div>
                     <div>
-                        <h2>Title 3</h2>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
+                        <h2 class="text-xl font-semibold">Title 3</h2>
+                        <p class="text-sm text-gray-600">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="bottom-cards-section">
-            <div class="card" style="background-image:url('assets/img1.jpg');">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.</div>
-            <div class="card" style="background-image:url('assets/img2.jpg');">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.</div>
-            <div class="card" style="background-image:url('assets/img3.jpg');">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.</div>
-            <div class="card" style="background-image:url('assets/img4.jpg');">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.</div>
+        <!-- Bottom Cards Section -->
+        <section class="mt-16 grid grid-cols-4 gap-0 max-md:grid-cols-2">
+            <div class="min-h-[200px] text-white text-sm p-5 flex items-end bg-cover bg-center rounded-tl-2xl rounded-bl-2xl" style="background-image:url('assets/img1.jpg');">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.
+            </div>
+            <div class="min-h-[200px] text-white text-sm p-5 flex items-end bg-cover bg-center" style="background-image:url('assets/img2.jpg');">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.
+            </div>
+            <div class="min-h-[200px] text-white text-sm p-5 flex items-end bg-cover bg-center" style="background-image:url('assets/img3.jpg');">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.
+            </div>
+            <div class="min-h-[200px] text-white text-sm p-5 flex items-end bg-cover bg-center rounded-tr-2xl rounded-br-2xl" style="background-image:url('assets/img4.jpg');">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Optio, doloremque.
+            </div>
         </section>
     </div>
 </body>

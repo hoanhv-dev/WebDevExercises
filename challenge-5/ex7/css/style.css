@@ -72,7 +72,7 @@ body {
     gap: 30px;
 }
 
-.list-item h3 {
+.list-item h2 {
     display: flex;
 }
 
@@ -132,8 +132,5 @@ body {
 
     .bottom-cards-section {
         grid-template-columns: repeat(2, 1fr);
-    }
-
-    .cảd
-    
+    }    
 }
