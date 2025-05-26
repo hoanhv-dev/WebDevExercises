@@ -126,7 +126,6 @@ async function addTask(title) {
   );
 
   renderTask(newTask);
-  
 }
 
 // Update a task
@@ -213,32 +212,31 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterValue = filterSelect.value;
     filterTasks(filterValue);
   });
-});
+  // Close filter
+  closeFilterBtn.addEventListener("click", () => {
+    filterOptions.classList.add("hidden");
+  });
 
-// Close filter
-closeFilterBtn.addEventListener("click", () => {
-  filterOptions.classList.add("hidden");
-});
+  // Close task for
+  closeTaskFormBtn.addEventListener("click", () => {
+    taskForm.classList.add("hidden");
+  });
 
-// Close task for
-closeTaskFormBtn.addEventListener("click", () => {
-  taskForm.classList.add("hidden");
-});
-
-// Next and Previous buttons
-nextBtn.addEventListener("click", () => {
-  if(currentPage<20){
-    currentPage++;
-    filteredTasksList.length > 0
-      ? renderFilteredTasks()
-      : fetchTasks(currentPage);
-  }
-});
-prevBtn.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    filteredTasksList.length > 0
-      ? renderFilteredTasks()
-      : fetchTasks(currentPage);
-  }
+  // Next and Previous buttons
+  nextBtn.addEventListener("click", () => {
+    if (currentPage < 20) {
+      currentPage++;
+      filteredTasksList.length > 0
+        ? renderFilteredTasks()
+        : fetchTasks(currentPage);
+    }
+  });
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      filteredTasksList.length > 0
+        ? renderFilteredTasks()
+        : fetchTasks(currentPage);
+    }
+  });
 });
