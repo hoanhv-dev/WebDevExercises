@@ -1,0 +1,156 @@
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.main-content {
+  flex: 1 1 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  min-width: 350px;
+  max-width: 480px;
+}
+
+.heading h1 {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 18px;
+  line-height: 1.1;
+}
+
+.heading p {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.btn {
+  padding: 14px 38px;
+  border-radius: 30px;
+  border: none;
+  background: #333;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 18px;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #555;
+}
+
+.badges {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+.badge {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #e3f2fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  color: #333;
+  border: 1.5px solid #b5b5b5;
+  position: relative;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.badge-blue {
+  background: #d6eaf8;
+}
+.badge-orange {
+  background: #ffe5b4;
+}
+.badge-pink {
+  background: #fbe3f8;
+}
+
+.badge .icon {
+  font-size: 1.7rem;
+  margin-top: 8px;
+}
+
+.info-cards {
+  display: flex;
+  gap: 32px;
+  margin-top: 12px;
+  background: #fff;
+  border: 1.5px solid #d6d6d6;
+  padding: 24px 32px;
+  min-width: 200px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+  border-radius: 30px;
+}
+
+.info-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.info-card p {
+  font-size: 0.98rem;
+  color: #666;
+  margin: 0;
+}
+
+.gallery {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+  max-width: 600px;
+  height: 640px;
+  margin: 0 auto;
+}
+
+.left-column,
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.left-column {
+  justify-content: flex-start;
+}
+
+.right-column {
+  justify-content: flex-end;
+}
+
+.item {
+  border: #222 solid 1px;
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+  object-fit: cover;
+  display: block;
+}
