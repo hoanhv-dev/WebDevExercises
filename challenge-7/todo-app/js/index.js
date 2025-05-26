@@ -2,17 +2,24 @@
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
 // DOM elements
+// Task
 const taskList = document.getElementById("taskList");
 const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
-const errorMessage = document.getElementById("error-message");
 const addTaskBtn = document.getElementById("add-task-button");
+const closeTaskFormBtn = document.getElementById("close-taskform-button");
+
+// Error message
+const errorMessage = document.getElementById("error-message");
+
+// Filter
 const filterBtn = document.getElementById("filter-button");
 const filterOptions = document.getElementById("filter-options");
 const filterSelect = document.getElementById("filter-select");
 const applyFilterBtn = document.getElementById("apply-filter-button");
 const closeFilterBtn = document.getElementById("close-filter-button");
-const closeTaskFormBtn = document.getElementById("close-taskform-button");
+
+// Pagination
 const nextBtn = document.getElementById("next-button");
 const prevBtn = document.getElementById("prev-button");
 
@@ -97,7 +104,7 @@ function renderFilteredTasks() {
   updatePageIndicator();
 }
 
-// Base Fetch function to add a action
+// Base Fetch function to add an action
 async function baseFetch(url, options = {}, errorMessage = "Request failed") {
   try {
     clearError();
@@ -193,11 +200,22 @@ document.addEventListener("DOMContentLoaded", function () {
   taskForm.addEventListener("submit", function (e) {
     e.preventDefault();
     const taskName = taskInput.value.trim();
-    if (taskName) {
-      addTask(taskName);
-      taskInput.value = "";
-      taskForm.classList.add("hidden");
+
+    if(taskName=== "") {
+      showError("Task name cannot be empty");
+      return;
     }
+    if (/^\d+$/.test(taskName)) {
+      showError("please enter a valid task name");
+      return;
+    }
+
+    clearError();
+    // Add the task
+    addTask(taskName);
+    taskInput.value = "";
+    taskForm.classList.add("hidden");
+
   });
 
   fetchTasks(currentPage); // Load tasks on page load
@@ -212,6 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterValue = filterSelect.value;
     filterTasks(filterValue);
   });
+
   // Close filter
   closeFilterBtn.addEventListener("click", () => {
     filterOptions.classList.add("hidden");
