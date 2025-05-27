@@ -1,4 +1,4 @@
-// DOM elements
+// ========== HTML Elements ==========
 const taskList = document.getElementById("taskList");
 const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
@@ -13,9 +13,12 @@ const closeTaskFormBtn = document.getElementById("close-taskform-button");
 const nextBtn = document.getElementById("next-button");
 const prevBtn = document.getElementById("prev-button");
 
+// ========== State ==========
 let currentPage = 1;
 const tasksPerPage = 10;
 let filteredTasksList = [];
+
+// ========== Helpers ==========
 
 function showError(message) {
   errorMessage.textContent = message;
@@ -27,7 +30,12 @@ function clearError() {
   errorMessage.classList.add("hidden");
 }
 
-// LocalStorage helpers
+function updatePageIndicator() {
+  const indicator = document.getElementById("page-indicator");
+  indicator.textContent = `Page ${currentPage}`;
+}
+
+// ========== Local Storage Helpers ==========
 function getLocalTasks() {
   return JSON.parse(localStorage.getItem("tasks")) || [];
 }
@@ -40,7 +48,8 @@ function generateTaskId() {
   return Date.now();
 }
 
-// Fetch and render tasks from localStorage
+// ========== Core Functions ==========
+// Fetch tasks from local storage and render them
 function fetchTasks(page = 1) {
   clearError();
   const tasks = getLocalTasks();
@@ -60,13 +69,11 @@ function renderTask(task) {
     "flex items-center justify-between bg-white p-3 rounded shadow";
   li.dataset.id = task.id;
 
-  const newEl = `
+  li.innerHTML = `
     <input type="checkbox" class="mr-2" ${task.completed ? "checked" : ""}>
     <span class="flex-1">${task.title}</span>
     <button class="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
   `;
-
-  li.innerHTML = newEl;
 
   const checkbox = li.querySelector("input[type='checkbox']");
   const deleteBtn = li.querySelector("button");
@@ -84,6 +91,7 @@ function renderTask(task) {
   taskList.appendChild(li);
 }
 
+// ========== Filter Functions ==========
 // Render filtered task
 function renderFilteredTasks() {
   const start = (currentPage - 1) * tasksPerPage;
@@ -95,6 +103,22 @@ function renderFilteredTasks() {
   updatePageIndicator();
 }
 
+// Filter options
+function filterTasks(filterValue) {
+  const tasks = getLocalTasks();
+  if (filterValue === "completed") {
+    filteredTasksList = tasks.filter((task) => task.completed);
+  } else if (filterValue === "not-completed") {
+    filteredTasksList = tasks.filter((task) => !task.completed);
+  } else {
+    filteredTasksList = tasks;
+  }
+
+  currentPage = 1;
+  renderFilteredTasks();
+}
+
+// ========== Task Management Functions ==========
 // Add a new task
 function addTask(title) {
   const tasks = getLocalTasks();
@@ -123,48 +147,9 @@ function deleteTask(id) {
   fetchTasks(currentPage);
 }
 
-// Filter options
-function filterTasks(filterValue) {
-  const tasks = getLocalTasks();
-  if (filterValue === "completed") {
-    filteredTasksList = tasks.filter((task) => task.completed);
-  } else if (filterValue === "not-completed") {
-    filteredTasksList = tasks.filter((task) => !task.completed);
-  } else {
-    filteredTasksList = tasks;
-  }
-
-  currentPage = 1;
-  renderFilteredTasks();
-}
-
-// Page indicator
-function updatePageIndicator() {
-  const indicator = document.getElementById("page-indicator");
-  indicator.textContent = `Page ${currentPage}`;
-}
-
-// Event listeners
-document.addEventListener("DOMContentLoaded", function () {
-  // Add task button
-  addTaskBtn.addEventListener("click", () => {
-    taskForm.classList.remove("hidden");
-    taskInput.focus();
-  });
-
-  // Confirm task form submission
-  taskForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const taskName = taskInput.value.trim();
-    if (taskName) {
-      addTask(taskName);
-      taskInput.value = "";
-      taskForm.classList.add("hidden");
-    }
-  });
-
-  fetchTasks(currentPage); // Load tasks on page load
-
+// ========== Register Actions ==========
+// Register filter actions
+function registerFilterActions() {
   // Show filter options
   filterBtn.addEventListener("click", () => {
     filterOptions.classList.toggle("hidden");
@@ -175,34 +160,80 @@ document.addEventListener("DOMContentLoaded", function () {
     const filterValue = filterSelect.value;
     filterTasks(filterValue);
   });
-});
 
-// Close filter
-closeFilterBtn.addEventListener("click", () => {
-  filterOptions.classList.add("hidden");
-});
+  // Close filter
+  closeFilterBtn.addEventListener("click", () => {
+    filterOptions.classList.add("hidden");
+  });
+}
 
-// Close task form
-closeTaskFormBtn.addEventListener("click", () => {
-  taskForm.classList.add("hidden");
-});
+// Register task actions
+function registerTaskActions() {
+  // Show task form
+  addTaskBtn.addEventListener("click", () => {
+    taskForm.classList.remove("hidden");
+    taskInput.focus();
+  });
 
-// Next and Previous buttons
-nextBtn.addEventListener("click", () => {
-  const maxPage = Math.ceil(
-    (filteredTasksList.length > 0
-      ? filteredTasksList.length
-      : getLocalTasks().length) / tasksPerPage
-  );
-  if (currentPage < maxPage) {
-    currentPage++;
-    filteredTasksList.length > 0 ? renderFilteredTasks() : fetchTasks(currentPage);
-  }
-});
+  // Confirm task form submission
+  taskForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = taskInput.value.trim();
 
-prevBtn.addEventListener("click", () => {
-  if (currentPage > 1) {
-    currentPage--;
-    filteredTasksList.length > 0 ? renderFilteredTasks() : fetchTasks(currentPage);
-  }
+    // Validate task title
+    if (!title) {
+      return showError("Task name cannot be empty");
+    }
+    if (/^\d+$/.test(title)) {
+      return showError("Please enter a valid task name");
+    }
+
+    clearError();
+    addTask(title);
+    taskInput.value = "";
+    taskForm.classList.add("hidden");
+  });
+
+  // Close task form
+  closeTaskFormBtn.addEventListener("click", () => {
+    taskForm.classList.add("hidden");
+  });
+}
+
+// Register Pagination Actions
+function registerPaginationActions() {
+  nextBtn.addEventListener("click", () => {
+    const maxPage = Math.ceil(
+      (filteredTasksList.length > 0
+        ? filteredTasksList.length
+        : getLocalTasks().length) / tasksPerPage
+    );
+    if (currentPage < maxPage) {
+      currentPage++;
+      filteredTasksList.length > 0
+        ? renderFilteredTasks()
+        : fetchTasks(currentPage);
+    }
+  });
+
+  prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      filteredTasksList.length > 0
+        ? renderFilteredTasks()
+        : fetchTasks(currentPage);
+    }
+  });
+}
+
+// ========== Event Listeners ==========
+document.addEventListener("DOMContentLoaded", function () {
+  // Next and Previous buttons
+  registerPaginationActions();
+  // Task actions
+  registerTaskActions();
+  // Filter actions
+  registerFilterActions();
+  // Initial fetch of tasks
+  fetchTasks(currentPage);
 });

@@ -1,32 +1,29 @@
-// API URL
+// ========== Config ==========
 const API_URL = "https://jsonplaceholder.typicode.com/todos";
 
-// DOM elements
-// Task
+// ========== DOM Elements ==========
 const taskList = document.getElementById("taskList");
 const taskForm = document.getElementById("taskForm");
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("add-task-button");
 const closeTaskFormBtn = document.getElementById("close-taskform-button");
-
-// Error message
 const errorMessage = document.getElementById("error-message");
-
-// Filter
 const filterBtn = document.getElementById("filter-button");
 const filterOptions = document.getElementById("filter-options");
 const filterSelect = document.getElementById("filter-select");
 const applyFilterBtn = document.getElementById("apply-filter-button");
 const closeFilterBtn = document.getElementById("close-filter-button");
-
-// Pagination
 const nextBtn = document.getElementById("next-button");
 const prevBtn = document.getElementById("prev-button");
+const pageIndicator = document.getElementById("page-indicator");
 
+// ========== State ==========
 let currentPage = 1;
 const tasksPerPage = 10;
-let filteredTasksList = [];
+let allTasks = [];
+let filteredTasks = [];
 
+// ========== Helpers ==========
 function showError(message) {
   errorMessage.textContent = message;
   errorMessage.classList.remove("hidden");
@@ -37,225 +34,173 @@ function clearError() {
   errorMessage.classList.add("hidden");
 }
 
-// Fetch and render tasks
-async function fetchTasks(page = 1) {
+function updatePageIndicator() {
+  const maxPage = Math.ceil(filteredTasks.length / tasksPerPage);
+  pageIndicator.textContent = `Page ${currentPage} of ${maxPage}`;
+}
+
+// ========== Core Functions ==========
+async function loadTasks() {
   try {
     clearError();
-    const res = await fetch(`${API_URL}?_limit=${tasksPerPage}&_page=${page}`);
-    if (!res.ok) {
-      throw new Error("Failed to fetch tasks");
-    }
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error("Failed to fetch tasks");
     const tasks = await res.json();
-    taskList.innerHTML = "";
-    tasks.forEach(renderTask);
 
-    updatePageIndicator();
+    allTasks = tasks;
+    filteredTasks = [...allTasks];
+    renderTasks();
   } catch (err) {
     showError(err.message);
   }
 }
 
-// Render a single task
+function renderTasks() {
+  const start = (currentPage - 1) * tasksPerPage;
+  const end = start + tasksPerPage;
+  const tasksToRender = filteredTasks.slice(start, end);
+
+  taskList.innerHTML = "";
+  tasksToRender.forEach(renderTask);
+  updatePageIndicator();
+}
+
 function renderTask(task) {
-  // Create the list item and set attributes
   const li = document.createElement("li");
-  li.className =
-    "flex items-center justify-between bg-white p-3 rounded shadow";
+  li.className = "flex items-center justify-between bg-white p-3 rounded shadow";
   li.dataset.id = task.id;
 
-  // Create HTML string for the task content
-  const newEl = `
+  li.innerHTML = `
     <input type="checkbox" class="mr-2" ${task.completed ? "checked" : ""}>
     <span class="flex-1">${task.title}</span>
     <button class="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
   `;
 
-  // Insert the HTML string into the li
-  li.innerHTML = newEl;
-
-  // Get references to the checkbox and delete button
-  const checkbox = li.querySelector("input[type='checkbox']");
-  const deleteBtn = li.querySelector("button");
-
-  // Add event listeners
-  checkbox.addEventListener("change", () => {
-    updateTask(task.id, checkbox.checked);
+  li.querySelector("input").addEventListener("change", (e) => {
+    updateTask(task.id, e.target.checked);
   });
 
-  deleteBtn.addEventListener("click", () => {
+  li.querySelector("button").addEventListener("click", () => {
     if (confirm("Are you sure you want to delete this task?")) {
-      deleteTask(task.id, li);
+      deleteTask(task.id);
     }
   });
 
-  // Append the list item to the task list
   taskList.appendChild(li);
 }
 
-// Render filtered task
-function renderFilteredTasks() {
-  const start = (currentPage - 1) * tasksPerPage;
-  const end = tasksPerPage + start;
-  const tasksToShow = filteredTasksList.slice(start, end);
+function addTask(title) {
+  const newTask = {
+    id: Date.now(), // Local ID only
+    title,
+    completed: false
+  };
 
-  taskList.innerHTML = "";
-  tasksToShow.forEach(renderTask);
-
-  updatePageIndicator();
+  allTasks.unshift(newTask);
+  filteredTasks = [...allTasks];
+  currentPage = 1;
+  renderTasks();
 }
 
-// Base Fetch function to add an action
-async function baseFetch(url, options = {}, errorMessage = "Request failed") {
-  try {
-    clearError();
-    const res = await fetch(url, options);
-    if (!res.ok) {
-      throw new Error(errorMessage);
-    }
-    if (res.status !== 204) {
-      return await res.json(); // Avoid parsing empty responses
-    }
-  } catch (err) {
-    showError(err.message);
+function updateTask(id, completed) {
+  const task = allTasks.find(t => t.id === id);
+  if (task) {
+    task.completed = completed;
+    renderTasks();
   }
 }
 
-// Add a new task
-async function addTask(title) {
-  const newTask = await baseFetch(
-    API_URL,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, completed: false }),
-    },
-    "Failed to add task"
-  );
+function deleteTask(id) {
+  allTasks = allTasks.filter(t => t.id !== id);
+  filteredTasks = [...allTasks];
 
-  renderTask(newTask);
+  // Fix pagination overflow
+  const maxPage = Math.ceil(filteredTasks.length / tasksPerPage);
+  if (currentPage > maxPage) currentPage = maxPage;
+
+  renderTasks();
 }
 
-// Update a task
-async function updateTask(id, completed) {
-  await baseFetch(
-    `${API_URL}/${id}`,
-    {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ completed }),
-    },
-    "Failed to update task"
-  );
+// ========== Filter ==========
+function applyFilter(value) {
+  switch (value) {
+    case "completed":
+      filteredTasks = allTasks.filter(t => t.completed);
+      break;
+    case "not-completed":
+      filteredTasks = allTasks.filter(t => !t.completed);
+      break;
+    default:
+      filteredTasks = [...allTasks];
+  }
+
+  currentPage = 1;
+  renderTasks();
 }
 
-// Delete a task
-async function deleteTask(id, element) {
-  await baseFetch(
-    `${API_URL}/${id}`,
-    {
-      method: "DELETE",
-    },
-    "Failed to delete task"
-  );
-
-  element.remove();
-}
-
-// Filter options
-function filterTasks(filterValue) {
-  fetch(API_URL)
-    .then((res) => res.json())
-    .then((tasks) => {
-      if (filterValue === "completed") {
-        filteredTasksList = tasks.filter((task) => task.completed);
-      } else if (filterValue === "not-completed") {
-        filteredTasksList = tasks.filter((task) => !task.completed);
-      } else {
-        filteredTasksList = tasks;
-      }
-
-      currentPage = 1;
-      renderFilteredTasks();
-    })
-    .catch((err) => {
-      showError("Failed to load tasks for filtering");
-    });
-}
-
-// Page indicator
-function updatePageIndicator() {
-  const indicator = document.getElementById("page-indicator");
-  indicator.textContent = `Page ${currentPage}`;
-}
-
-// Event listeners
-document.addEventListener("DOMContentLoaded", function () {
-  // Add task button
+// ========== Task Action Register ==========
+function registerTaskActions() {
   addTaskBtn.addEventListener("click", () => {
     taskForm.classList.remove("hidden");
     taskInput.focus();
   });
 
-  // Confirm task form submission
-  taskForm.addEventListener("submit", function (e) {
+  taskForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const taskName = taskInput.value.trim();
+    const title = taskInput.value.trim();
 
-    if(taskName=== "") {
-      showError("Task name cannot be empty");
-      return;
-    }
-    if (/^\d+$/.test(taskName)) {
-      showError("please enter a valid task name");
-      return;
-    }
+    if (!title) return showError("Task name cannot be empty");
+    if (/^\d+$/.test(title)) return showError("Please enter a valid task name");
 
     clearError();
-    // Add the task
-    addTask(taskName);
+    addTask(title);
     taskInput.value = "";
     taskForm.classList.add("hidden");
-
   });
 
-  fetchTasks(currentPage); // Load tasks on page load
+  closeTaskFormBtn.addEventListener("click", () => {
+    taskForm.classList.add("hidden");
+  });
+}
 
-  // Show filter options
+// ========= Filter Action Register ==========
+function registerFilterActions() {
   filterBtn.addEventListener("click", () => {
     filterOptions.classList.toggle("hidden");
   });
 
-  // Apply filter
   applyFilterBtn.addEventListener("click", () => {
-    const filterValue = filterSelect.value;
-    filterTasks(filterValue);
-  });
-
-  // Close filter
-  closeFilterBtn.addEventListener("click", () => {
+    applyFilter(filterSelect.value);
     filterOptions.classList.add("hidden");
   });
 
-  // Close task for
-  closeTaskFormBtn.addEventListener("click", () => {
-    taskForm.classList.add("hidden");
+  closeFilterBtn.addEventListener("click", () => {
+    filterOptions.classList.add("hidden");
   });
+}
 
-  // Next and Previous buttons
+// ========== Pagination Button Register ==========
+function registerPaginationButtons() {
   nextBtn.addEventListener("click", () => {
-    if (currentPage < 20) {
+    const maxPage = Math.ceil(filteredTasks.length / tasksPerPage);
+    if (currentPage < maxPage) {
       currentPage++;
-      filteredTasksList.length > 0
-        ? renderFilteredTasks()
-        : fetchTasks(currentPage);
+      renderTasks();
     }
   });
+
   prevBtn.addEventListener("click", () => {
     if (currentPage > 1) {
       currentPage--;
-      filteredTasksList.length > 0
-        ? renderFilteredTasks()
-        : fetchTasks(currentPage);
+      renderTasks();
     }
   });
+}
+
+// ========== Event Listeners ==========
+document.addEventListener("DOMContentLoaded", () => {
+  loadTasks();
+  registerTaskActions();
+  registerFilterActions();
+  registerPaginationButtons();
 });
