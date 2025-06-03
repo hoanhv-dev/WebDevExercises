@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do App (API)</title>
+
+    <!-- Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body class="bg-white h-screen">
+    <div class="relative h-screen">
+      <!-- ========== Header ========== -->
+      <nav
+        class="h-16 bg-yellow-100 flex items-center justify-end px-6 border-b border-gray-300 z-0 relative"
+      >
+        <img
+          src="./assets/setting icon.png"
+          alt="settings"
+          class="w-10 h-10 cursor-pointer transition-transform transform hover:scale-110"
+        />
+      </nav>
+
+      <!-- ========== Sidebar ========== -->
+      <aside
+        class="w-1/5 h-full bg-yellow-100 p-4 flex flex-col gap-6 border-r border-gray-300 absolute top-0 left-0 z-10"
+      >
+        <!-- Logo -->
+        <div
+          class="flex items-center gap-2 text-green-600 font-bold text-3xl mb-4"
+        >
+          <img src="./assets/Icon.png" alt="icon" class="w-10 h-10" />
+          <span>TO-DO-LIST</span>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <nav class="flex flex-col gap-2">
+          <button
+            class="flex items-center gap-2 px-3 py-2 bg-green-300 text-xl text-green-900 rounded-md hover:scale-105 transition"
+          >
+            <img src="./assets/image 1.png" alt="check" class="w-6 h-6" />
+            Tasks
+          </button>
+          <button
+            class="flex items-center gap-2 px-3 py-2 bg-green-300 text-xl text-green-900 rounded-md hover:scale-105 transition"
+          >
+            <img src="./assets/Star 2.png" alt="star" class="w-6 h-6" />
+            Important
+          </button>
+          <button
+            class="flex items-center gap-2 px-3 py-2 bg-green-300 text-xl text-green-900 rounded-md hover:scale-105 transition"
+          >
+            <img src="./assets/bin icon.png" alt="bin" class="w-6 h-6" />
+            Completed
+          </button>
+        </nav>
+      </aside>
+
+      <!-- ========== Main Content ========== -->
+      <main
+        class="h-[calc(100%-4rem)] ml-[20%] p-8 bg-yellow-50 relative overflow-y-auto"
+      >
+        <!-- Add Task + Filter Button -->
+        <div class="flex gap-4 items-end justify-between mt-5">
+          <button
+            id="add-task-button"
+            class="bg-green-200 rounded-xl w-40 h-40 flex flex-col items-center justify-center shadow-md cursor-pointer transition-transform hover:scale-105"
+          >
+            <p class="text-green-900 text-2xl">Add a task</p>
+            <span class="text-7xl text-pink-500">+</span>
+          </button>
+          <button
+            id="filter-button"
+            class="bg-green-200 rounded-xl w-20 h-10 flex flex-col items-center justify-center shadow-md cursor-pointer transition-transform hover:scale-105"
+          >
+            <p text-green-900 text-2xl>Filter</p>
+          </button>
+        </div>
+
+        <!-- ========== Filter Options ========== -->
+        <div
+          id="filter-options"
+          class="bg-white p-4 rounded-xl shadow-lg absolute left-1/2 top-40 transform -translate-x-1/2 hidden w-96 flex-col gap-4"
+        >
+          <label class="block mb-2 text-green-900 font-bold">Filter by:</label>
+          <select
+            id="filter-select"
+            class="border border-gray-300 rounded px-3 py-2 w-full mb-4"
+          >
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="not-completed">Not Completed</option>
+          </select>
+          <button
+            id="apply-filter-button"
+            class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500"
+          >
+            Apply
+          </button>
+          <button
+            id="close-filter-button"
+            class="absolute top-3 right-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mb-2 text-[10px]"
+          >
+            X
+          </button>
+        </div>
+
+        <!-- ========== Task Form Modal ========== -->
+        <form
+          id="taskForm"
+          class="bg-white p-6 rounded-xl shadow-lg absolute left-1/2 top-40 transform -translate-x-1/2 hidden w-96 flex-col gap-4"
+        >
+          <label class="block mb-2 text-green-900 font-bold">Task Name</label>
+          <input
+            type="text"
+            id="taskInput"
+            class="border border-gray-300 rounded px-3 py-2 w-full mb-4"
+            required
+            placeholder="Enter task name"
+          />
+          <button
+            type="submit"
+            class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500"
+          >
+            Add
+          </button>
+          <button
+            id="close-taskform-button"
+            class="absolute top-3 right-4 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mb-2 text-[10px]"
+          >
+            X
+          </button>
+        </form>
+
+        <!-- ========== Task List ========== -->
+        <ul id="taskList" class="mt-10 space-y-4"></ul>
+
+        <!-- ========== Pagination ========== -->
+        <div class="flex justify-between items-end mt-6">
+          <!-- Prev -->
+          <button
+            id="prev-button"
+            class="bg-green-200 rounded-xl w-20 h-10 flex items-center justify-center shadow-md cursor-pointer transition-transform hover:scale-105"
+          >
+            <p class="text-green-900 font-semibold text-xl">Prev</p>
+          </button>
+
+          <!-- Page indicator -->
+          <div
+            id="page-indicator"
+            class="text-center text-green-800 font-semibold mt-4"
+          >
+            Page 1
+          </div>
+
+          <!-- Next -->
+          <button
+            id="next-button"
+            class="bg-green-200 rounded-xl w-20 h-10 flex items-center justify-center shadow-md cursor-pointer transition-transform hover:scale-105"
+          >
+            <p class="text-green-900 font-semibold text-xl">Next</p>
+          </button>
+        </div>
+
+        <!-- ========== Error Message ========== -->
+        <div id="error-message" class="text-red-500 mt-4 hidden"></div>
+      </main>
+    </div>
+
+    <!-- ========== Scripts ========== -->
+    <script src="./js/localStorage.js"></script>
+  </body>
+</html>
