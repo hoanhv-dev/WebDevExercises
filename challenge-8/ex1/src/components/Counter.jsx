@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-const Counter = () => {
-  const [count, setCount] = useState(0);
+const Counter = (props) => {
+  const [count, setCount] = useState(props.initValue);
 
-  function handleCountPlus() {
+  const handleCountPlus = () => {
     setCount(count + 1);
   }
 
-  function handleCountMinus() {
+  const handleCountMinus = () => {
     setCount(count - 1);
   }
 
