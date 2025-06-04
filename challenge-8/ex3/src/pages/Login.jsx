@@ -19,6 +19,7 @@ const Login = () => {
     e.preventDefault();
     if (!username || !password) {
       alert("Please input information.");
+      return;
     }
 
     localStorage.setItem("username", JSON.stringify(username));
