@@ -4,21 +4,26 @@ import LoadingIndicator from '@shared/components/LoadingIndicator';
 import { TasksType } from '@features/Home/types/task';
 import TaskForm from '@features/Home/components/TaskForm/TaskForm';
 import FilterForm from '@features/Home/components/FilterForm/FilterForm';
-
-import './style.scss';
 import Header from '@features/Home/components/Header/Header';
 import SideBar from '@features/Home/components/SideBar/SideBar';
 import { useEffect, useState } from 'react';
+import './style.scss';
+
+// Constants
+const ITEMS_PER_PAGE = 10;
 
 const Home = () => {
+  // API and Data States
   const { data, isLoading } = useGetPostsQuery();
   const [tasks, setTasks] = useState<TasksType[]>([]);
   const [filteredTasks, setFilteredTasks] = useState<TasksType[]>([]);
-  const ITEMS_PER_PAGE = 10;
+
+  // UI States
   const [showForm, setShowForm] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Initialize data from API
   useEffect(() => {
     if (data) {
       setTasks(data);
@@ -26,28 +31,95 @@ const Home = () => {
     }
   }, [data]);
 
-  const onToggle = (id: number) => {
-    setTasks((tasks) => tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
-    setFilteredTasks((tasks) => tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
+  // Helper Functions
+  const updatePagination = (newFilteredTasks: TasksType[]) => {
+    const newTotalPages = Math.ceil(newFilteredTasks.length / ITEMS_PER_PAGE);
+    if (currentPage > newTotalPages) {
+      setCurrentPage(newTotalPages || 1);
+    }
+    return newFilteredTasks;
   };
 
-  const onDelete = (id: number) => {
+  const filterTasksByCompletion = (taskList: TasksType[], completed: boolean | null) => {
+    return completed === null
+      ? taskList
+      : taskList.filter((task) => task.completed === completed);
+  };
+
+  const shouldAddToFilteredTasks = (currentFilteredTasks: TasksType[], newTask: TasksType) => {
+    // Show all tasks
+    if (currentFilteredTasks.length === tasks.length) {
+      return true;
+    }
+    // Show only completed tasks
+    if (currentFilteredTasks.every((t) => t.completed)) {
+      return newTask.completed;
+    }
+    // Show only not completed tasks
+    if (currentFilteredTasks.every((t) => !t.completed)) {
+      return !newTask.completed;
+    }
+    return false;
+  };
+
+  // Task Management Functions
+  const handleTaskToggle = (id: number) => {
+    const updateTaskCompletion = (taskList: TasksType[]) =>
+      taskList.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      );
+
+    setTasks(updateTaskCompletion);
+    setFilteredTasks((currentFilteredTasks) => 
+      updatePagination(updateTaskCompletion(currentFilteredTasks))
+    );
+  };
+
+  const handleTaskDelete = (id: number) => {
     setTasks((tasks) => tasks.filter((task) => task.id !== id));
     setFilteredTasks((currentFilteredTasks) => {
       const newFilteredTasks = currentFilteredTasks.filter((task) => task.id !== id);
-      
-      // Calculate new total pages
-      const newTotalPages = Math.ceil(newFilteredTasks.length / ITEMS_PER_PAGE);
-      
-      // If current page is greater than new total pages, move to the last page
-      if (currentPage > newTotalPages) {
-        setCurrentPage(newTotalPages || 1);
-      }
-      
-      return newFilteredTasks;
+      return updatePagination(newFilteredTasks);
     });
   };
 
+  const handleAddTask = (newTask: Omit<TasksType, 'id'>) => {
+    // Check for duplicate task title
+    const isDuplicate = tasks.some(
+      task => task.title.toLowerCase().trim() === newTask.title.toLowerCase().trim()
+    );
+
+    if (isDuplicate) {
+      alert('This task already exists!');
+      return;
+    }
+
+    const task: TasksType = {
+      ...newTask,
+      id: Math.max(0, ...tasks.map((t) => t.id)) + 1,
+    };
+
+    // Update main tasks list
+    setTasks((tasks) => [...tasks, task]);
+
+    // Update filtered tasks and pagination
+    setFilteredTasks((currentFilteredTasks) => {
+      const newFilteredTasks = shouldAddToFilteredTasks(currentFilteredTasks, task)
+        ? [...currentFilteredTasks, task]
+        : currentFilteredTasks;
+      
+      return updatePagination(newFilteredTasks);
+    });
+  };
+
+  // Filter Management
+  const handleApplyFilter = (filters: { completed: boolean | null }) => {
+    const newFilteredTasks = filterTasksByCompletion(tasks, filters.completed);
+    setFilteredTasks(newFilteredTasks);
+    setCurrentPage(1);
+  };
+
+  // UI Handlers
   const handleOpenForm = () => {
     setShowForm(true);
     setShowFilter(false);
@@ -58,68 +130,23 @@ const Home = () => {
     setShowFilter(true);
   };
 
-  const handleAddTask = (newTask: Omit<TasksType, 'id'>) => {
-    const task: TasksType = {
-      ...newTask,
-      id: Math.max(0, ...tasks.map((t) => t.id)) + 1,
-    };
-    setTasks((tasks) => [...tasks, task]);
-    
-    // Only add to filteredTasks if it matches the current filter
-    setFilteredTasks((currentFilteredTasks) => {
-      // If we're showing all tasks, add the new task
-      if (currentFilteredTasks.length === tasks.length) {
-        return [...currentFilteredTasks, task];
-      }
-      
-      // If we're showing completed tasks, only add if the new task is completed
-      if (currentFilteredTasks.every(t => t.completed)) {
-        return task.completed ? [...currentFilteredTasks, task] : currentFilteredTasks;
-      }
-      
-      // If we're showing not completed tasks, only add if the new task is not completed
-      if (currentFilteredTasks.every(t => !t.completed)) {
-        return !task.completed ? [...currentFilteredTasks, task] : currentFilteredTasks;
-      }
-      
-      return currentFilteredTasks;
-    });
-
-    // Update current page based on the new filtered tasks length
-    setFilteredTasks((newFilteredTasks) => {
-      const newTotalPages = Math.ceil(newFilteredTasks.length / ITEMS_PER_PAGE);
-      // If current page is greater than new total pages, set to last page
-      if (currentPage > newTotalPages) {
-        setCurrentPage(newTotalPages || 1);
-      }
-      return newFilteredTasks;
-    });
-  };
-
-  const handleApplyFilter = (filters: { completed: boolean | null }) => {
-    if (filters.completed === null) {
-      setFilteredTasks(tasks);
-    } else {
-      setFilteredTasks(tasks.filter((task) => task.completed === filters.completed));
-    }
-    setCurrentPage(1);
-  };
-
-  // Pagination logic
+  // Pagination Calculations
   const totalPages = Math.ceil(filteredTasks.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const currentTasks = filteredTasks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  return isLoading ? (
-    <LoadingIndicator />
-  ) : (
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
+  return (
     <div className='HomeContainer min-h-screen bg-yellow-50'>
       <Header />
       <SideBar />
       <TasksList
         tasks={currentTasks}
-        onToggle={onToggle}
-        onDelete={onDelete}
+        onToggle={handleTaskToggle}
+        onDelete={handleTaskDelete}
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
