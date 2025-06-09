@@ -56,10 +56,7 @@ const Home = () => {
       return newTask.completed;
     }
     // Show only not completed tasks
-    if (currentFilteredTasks.every((t) => !t.completed)) {
-      return !newTask.completed;
-    }
-    return false;
+    return !newTask.completed;
   };
 
   // Task Management Functions
@@ -84,16 +81,6 @@ const Home = () => {
   };
 
   const handleAddTask = (newTask: Omit<TasksType, 'id'>) => {
-    // Check for duplicate task title
-    const isDuplicate = tasks.some(
-      task => task.title.toLowerCase().trim() === newTask.title.toLowerCase().trim()
-    );
-
-    if (isDuplicate) {
-      alert('This task already exists!');
-      return;
-    }
-
     const task: TasksType = {
       ...newTask,
       id: Math.max(0, ...tasks.map((t) => t.id)) + 1,
