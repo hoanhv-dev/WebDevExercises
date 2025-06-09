@@ -1,17 +1,7 @@
-import { TasksType } from '@features/Home/types/task';
+import { TasksListProps } from '@features/Home/types/task';
 import TopButton from '../TopButton/TopButton';
 import Pagination from '../Pagination/Pagination';
 
-interface TasksListProps {
-  tasks: TasksType[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
-  currentPage: number;
-  totalPages: number;
-  onPageChange: (page: number) => void;
-  onAddClick: () => void;
-  onFilterClick: () => void;
-}
 
 const TasksList = ({
   tasks,
