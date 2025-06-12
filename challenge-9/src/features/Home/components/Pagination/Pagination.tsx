@@ -1,4 +1,8 @@
-import { PaginationType } from "@features/Home/types/pagination";
+type PaginationType = {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+};
 
 const Pagination: React.FC<PaginationType> = ({ currentPage, totalPages, onPageChange }) => {
   return (

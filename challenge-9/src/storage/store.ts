@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import logger from 'redux-logger';
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import tasksReducer from '@features/Home/storage/slices/tasksSlice';
 
 import { AppMiddleware, AppQueries, AppSlices } from '@features';
 import { rtkQueryErrorLogger } from '@shared/middlewares/errorToast';
@@ -14,6 +15,7 @@ export const rootReducer = combineReducers({
   ...AppSlices,
   // RTK queries
   ...AppQueries,
+  tasks: tasksReducer,
 });
 
 const store = configureStore({

@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-interface UserInfo {
+type UserInfo = {
   email: string;
   password: string;
 }
