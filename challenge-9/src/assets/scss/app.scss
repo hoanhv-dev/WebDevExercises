@@ -1,0 +1,9 @@
+// Add tailwind
+@use 'tailwind/styles';
+
+// Use this file as global scss helpers
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+@use 'abstracts/functions';
+@use 'base/_typography';
+@use 'base/_override';
