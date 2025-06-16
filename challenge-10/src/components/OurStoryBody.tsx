@@ -98,13 +98,13 @@ const OurStoryBody = () => {
               <img
                 src="/OurStories/img3.avif"
                 alt="Front photo"
-                className="w-full h-full object-cover transform rotate-[6deg] translate-x-[25%] translate-y-[70%] shadow-lg rounded-md"
+                className="w-full h-full object-cover transform rotate-[6deg] translate-x-[25%] translate-y-[60%] shadow-lg rounded-md"
               />
             </div>
           </div>
         </div>
 
-        <div className="mt-[340px] sm:mt-[400px] max-w-4xl mx-auto space-y-6 relative z-0 mb-20">
+        <div className="mt-[300px] sm:mt-[350px] max-w-4xl mx-auto space-y-6 relative z-0 mb-20">
           <p
             ref={bottomText1Ref}
             className={`text-base sm:text-lg md:text-2xl font-playfair transition-opacity duration-1000 ${bottomText1Class}`}
