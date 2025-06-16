@@ -116,35 +116,39 @@ const HomeBody = () => {
         </Link>
       </div>
 
-      <div className="relative w-full mt-8 sm:mt-12 overflow-hidden" style={{ minHeight: '400px' }}>
-        <div className="absolute inset-0 w-full h-full">
-          <img
-            src="/Home/body-2-home.avif"
-            alt="body-2-home"
-            className="w-full h-full object-cover"
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-          />
-        </div>
-        <div className="relative z-10 flex flex-col items-center justify-center text-center p-4 sm:p-6 md:p-8" style={{ minHeight: 'inherit' }}>
-          <div
-            className={`text-white ${registryAnimationClass} w-full max-w-[90%] sm:max-w-[80%] md:max-w-[600px]`}
-            ref={registryRef}
-          >
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-playfair mb-4 sm:mb-6">REGISTRY</h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-playfair mb-6 sm:mb-8">
-              Your presence is the most cherished gift. Should you wish to
-              contribute, we've created a honeymoon registry to help us embark
-              on a memorable adventure to the Amalfi Coast.
-            </p>
-            <Link 
-              to="/registry" 
-              className="inline-block bg-[rgb(125,118,98)] hover:bg-[rgb(73,70,62)] text-white text-base sm:text-lg md:text-xl px-6 py-2 sm:px-8 sm:py-3 rounded-full transition-colors duration-300"
-            >
-              GO TO REGISTRY
-            </Link>
+      <div className="relative w-full max-w-[1280px] mt-12 mx-auto">
+          {/* Image Wrapper */}
+          <div className="relative w-full">
+            <img
+              src="/Home/body-2-home.avif"
+              alt="body-2-home"
+              className="w-full h-[500px] md:h-[747px] object-cover"
+            />
+
+            {/* Overlay text */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 py-6 md:px-8">
+              <div
+                ref={registryRef}
+                className={`text-white max-w-[600px] ${registryAnimationClass}`}
+              >
+                <h1 className="text-3xl md:text-5xl font-playfair mb-4 md:mb-6">
+                  REGISTRY
+                </h1>
+                <p className="text-base sm:text-lg md:text-2xl font-playfair mb-6 md:mb-8">
+                  Your presence is the most cherished gift. Should you wish to
+                  contribute, we've created a honeymoon registry to help us
+                  embark on a memorable adventure to the Amalfi Coast.
+                </p>
+                <Link
+                  to="/registry"
+                  className="inline-block bg-[rgb(125,118,98)] hover:bg-[rgb(73,70,62)] text-white text-lg md:text-xl px-6 md:px-8 py-3 rounded-full transition-colors duration-300"
+                >
+                  GO TO REGISTRY
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
     </>
   );
 };

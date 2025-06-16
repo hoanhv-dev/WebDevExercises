@@ -76,10 +76,8 @@ const OurStoryBody = () => {
           </div>
         </div>
 
-        {/* Overlapping Images (Responsive & Fixed Position) */}
-        <div className="w-full h-[642px] md:h-[700px] flex justify-center">
-          <div className="relative w-[80vw] max-w-[320px] aspect-[3/4]">
-            {/* Back Image */}
+        <div className="w-full flex justify-center mt-16 relative z-10">
+          <div className="relative w-[80vw] max-w-[240px] sm:max-w-[280px] md:max-w-[320px] aspect-[3/4]">
             {/* Back Image */}
             <div
               ref={img2Ref}
@@ -88,7 +86,7 @@ const OurStoryBody = () => {
               <img
                 src="/OurStories/img2.avif"
                 alt="Back photo"
-                className="w-full object-cover transform -rotate-[6deg] translate-x-[-25%]"
+                className="w-full h-full object-cover transform -rotate-[6deg] translate-x-[-25%]"
               />
             </div>
 
@@ -100,14 +98,13 @@ const OurStoryBody = () => {
               <img
                 src="/OurStories/img3.avif"
                 alt="Front photo"
-                className="w-full object-cover transform rotate-[6deg] translate-x-[25%] translate-y-[70%] shadow-lg rounded-md"
+                className="w-full h-full object-cover transform rotate-[6deg] translate-x-[25%] translate-y-[60%] shadow-lg rounded-md"
               />
             </div>
           </div>
         </div>
 
-        {/* Add enough margin to push content below the image block */}
-        <div className="mt-12 sm:mt-[200px] max-w-4xl mx-auto space-y-6">
+        <div className="mt-[300px] sm:mt-[350px] max-w-4xl mx-auto space-y-6 relative z-0 mb-20">
           <p
             ref={bottomText1Ref}
             className={`text-base sm:text-lg md:text-2xl font-playfair transition-opacity duration-1000 ${bottomText1Class}`}
@@ -123,7 +120,6 @@ const OurStoryBody = () => {
           </p>
         </div>
 
-        {/* RSVP Button */}
         <div
           ref={buttonRef}
           className={`flex justify-center transition-opacity duration-1000 ${buttonClass} mb-12`}
