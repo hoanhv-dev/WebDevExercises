@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { useFadeIn } from "../hooks/useFadeInAnimation";
-import type { OurStoryData } from "../types";
+import type { OurStoryData } from "../storage/types";
 
 export default function OurStoryBody({
   topImage,

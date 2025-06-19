@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import type { HeroType } from '../types';
+import type { HeroType } from '../storage/types';
 
 type HeroProps = {
   hero: HeroType;

@@ -8,7 +8,7 @@ import {
   selectEventDetails,
   selectTravelStay,
   selectRegistry 
-} from "../storage/details/detailsSelectors";
+} from "../storage/selectors/detailsSelectors";
 
 export default function Details() {
   // Fetch data

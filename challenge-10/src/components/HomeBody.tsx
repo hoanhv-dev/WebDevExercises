@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useFadeInList } from "../hooks/useFadeInAnimation";
-import type { WeddingItems, Venue, Registry } from "../types";
+import type { WeddingItems, Venue, Registry } from "../storage/types";
 import { useRef } from "react";
 import { useFadeIn } from "../hooks/useFadeInAnimation";
 

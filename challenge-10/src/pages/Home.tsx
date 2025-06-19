@@ -1,9 +1,9 @@
 import { useGetHomeQuery } from '../services/api';
 import HomeBody from "../components/HomeBody";
-import { selectHomeData } from "../storage/home/homeSelectors";
+import { selectHomeData } from "../storage/selectors/homeSelectors";
 import { useAppSelector } from '../hooks/hooks';
 import Hero from '../components/Hero';
-import type { WeddingItems } from '../types';
+import type { WeddingItems } from '../storage/types';
 
 export default function Home() {
   const { isLoading, isError } = useGetHomeQuery(undefined);

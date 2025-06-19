@@ -1,8 +1,8 @@
 import OurStoryBody from "../components/OurStoryBody";
 import { useGetOurStoryQuery } from "../services/api";
 import { useSelector } from "react-redux";
-import { selectOurStoryData } from "../storage/OurStory/ourStorySelector";
-import type { OurStoryData } from "../types";
+import { selectOurStoryData } from "../storage/selectors/ourStorySelector";
+import type { OurStoryData } from "../storage/types";
 
 // Default data in case API fails
 const defaultOurStoryData: OurStoryData = {

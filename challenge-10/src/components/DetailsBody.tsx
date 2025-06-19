@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { useFadeIn } from "../hooks/useFadeInAnimation";
-import type { DetailsBodyProps } from "../types";
+import type { DetailsBodyProps } from "../storage/types";
 
 export default function DetailsBody({
   hero,
