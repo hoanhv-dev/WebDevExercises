@@ -1,129 +1,91 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
 type UseFadeInReturn = {
-  isVisible: boolean;
   className: string;
 };
 
+const defaultOptions: IntersectionObserverInit = {
+  threshold: 0.1,
+  rootMargin: "-50px 0px",
+};
+
+// Single element fade-in animation
 export const useFadeIn = <T extends HTMLElement = HTMLElement>(
   ref: React.RefObject<T | null>,
-  options: IntersectionObserverInit = {
-    threshold: 0.1,
-    rootMargin: "-50px 0px",
-  }
 ): UseFadeInReturn => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      const [entry] = entries;
+    const observer = new IntersectionObserver(([entry]) => {
       setIsVisible(entry.isIntersecting);
-    };
-
-    const observer = new IntersectionObserver(handleIntersect, options);
+    }, defaultOptions);
 
     observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [ref, options]);
-
-  const baseClasses = "transition-opacity duration-3000 ease-out";
-  const visibilityClass = isVisible ? "opacity-100" : "opacity-0";
-  const className = `${baseClasses} ${visibilityClass}`;
+    return () => observer.disconnect();
+  }, [ref]);
 
   return {
-    isVisible,
-    className,
+    className: `transition-opacity duration-1000 ease-out ${isVisible ? 'opacity-100' : 'opacity-0'}`,
   };
 };
 
-type UseFadeInListReturn = {
-  getRef: (index: number) => (el: HTMLElement | null) => void;
-
-  getClassName: (index: number) => string;
-};
-
-export const useFadeInList = (
-  count: number,
-  options: IntersectionObserverInit = {
-    threshold: 0.1,
-    rootMargin: "-50px 0px",
-  }
-): UseFadeInListReturn => {
+// List of elements fade-in animation
+export const useFadeInList = (count: number) => {
   const [visibleItems, setVisibleItems] = useState<Set<number>>(new Set());
   const elementsRef = useRef<Array<HTMLElement | null>>(Array(count).fill(null));
   const observerRef = useRef<IntersectionObserver | null>(null);
 
-  // Create a stable reference to the options object
-  const optionsRef = useRef(options);
-  optionsRef.current = options;
-
-  // Initialize the observer only once
+  // Initialize observer
   useEffect(() => {
-    const handleIntersect = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        const index = parseInt(
-          entry.target.getAttribute("data-index") || "-1",
-          10
-        );
-        if (index === -1) return;
-
-        setVisibleItems((prev) => {
-          const next = new Set(prev);
-          if (entry.isIntersecting) {
-            next.add(index);
-          } else {
-            next.delete(index);
+    const observer = new IntersectionObserver((entries) => {
+      setVisibleItems(prev => {
+        const next = new Set(prev);
+        entries.forEach(entry => {
+          const index = parseInt((entry.target as HTMLElement).dataset.index || '-1', 10);
+          if (index >= 0) {
+            entry.isIntersecting ? next.add(index) : next.delete(index);
           }
-          return next;
         });
+        return next;
       });
-    };
+    }, defaultOptions);
 
-    observerRef.current = new IntersectionObserver(handleIntersect, optionsRef.current);
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, []); // Empty dependency array means this runs once on mount
+    observerRef.current = observer;
+    return () => observerRef.current?.disconnect();
+  }, []);
 
   // Update elements and observe them
   const updateElement = useCallback((index: number, element: HTMLElement | null) => {
-    // Unobserve the old element if it exists
+    if (!observerRef.current) {
+      return;
+    }
+
     const oldElement = elementsRef.current[index];
-    if (oldElement && observerRef.current) {
+    if (oldElement) {
       observerRef.current.unobserve(oldElement);
     }
 
-    // Update the ref
     elementsRef.current[index] = element;
-
-    // Observe the new element if it exists
-    if (element && observerRef.current) {
+    if (element) {
       element.dataset.index = index.toString();
       observerRef.current.observe(element);
-    }
+    } 
   }, []);
 
-  const getRef = useCallback((index: number) => (element: HTMLElement | null) => {
-    updateElement(index, element);
-  }, [updateElement]);
-  const getClassName = (index: number) => {
-    const baseClasses = "transition-opacity duration-1000 ease-out";
-    const visibilityClass = visibleItems.has(index)
-      ? "opacity-100"
-      : "opacity-0";
-    return `${baseClasses} ${visibilityClass}`;
-  };
+  const getRef = useCallback((index: number) => 
+    (element: HTMLElement | null) => updateElement(index, element),
+    [updateElement]
+  );
 
-  return {
-    getRef,
-    getClassName,
-  };
+  const getClassName = useCallback((index: number) => 
+    `transition-opacity duration-1000 ease-out ${visibleItems.has(index) ? 'opacity-100' : 'opacity-0'}`,
+    [visibleItems]
+  );
+
+  return { getRef, getClassName };
 };

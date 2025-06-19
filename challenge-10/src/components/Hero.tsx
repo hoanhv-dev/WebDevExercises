@@ -1,6 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import type { HeroType } from '../types';
 
-const Hero = () => {
+type HeroProps = {
+  hero: HeroType;
+}
+
+export default function Hero({ hero }: HeroProps) {
   const [scrollY, setScrollY] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroHeight, setHeroHeight] = useState(0);
@@ -32,7 +37,7 @@ const Hero = () => {
   return (
     <section 
       ref={heroRef}
-      className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden"
+      className="relative h-[40vh] sm:h-[50vh] md:h-[60vh] overflow-hidden"
     >
       <div className="absolute inset-0 bg-white bg-center"></div>
       
@@ -41,13 +46,11 @@ const Hero = () => {
         style={getTextStyle()}
       >
         <div className="text-center text-black px-4 w-full max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-playfair px-4">
-            Jessica & James
-          </h1>
+          <p className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-playfair px-4">
+            {hero.title}
+          </p>
         </div>
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

@@ -3,9 +3,7 @@ import Home from "./pages/Home"
 import OurStory from "./pages/OurStory"
 import Details from "./pages/Details"
 import MainLayout from "./layouts/MainLayout"
-function App() {
-
-
+export default function App() {
   return (
     <Router>
       <MainLayout>
@@ -18,5 +16,3 @@ function App() {
     </Router>
   )
 }
-
-export default App

@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
-const NavBar = () => {
+export default function NavBar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -46,6 +46,7 @@ const NavBar = () => {
     { path: '/', label: 'HOME' },
     { path: '/our-story', label: 'OUR STORY' },
     { path: '/details', label: 'DETAILS' },
+    { path: '/rsvp', label: 'RSVP' },
   ];
 
   return (
@@ -119,5 +120,3 @@ const NavBar = () => {
     </>
   );
 };
-
-export default NavBar;
