@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
-import type { RootState } from "../../app/store";
-import type { OurStoryData } from "../../types";
+import type { RootState } from "../store";
+import type { OurStoryData } from "../types";
 
 // Base selector
 export const selectOurStoryData = (state: RootState): OurStoryData | undefined => 
