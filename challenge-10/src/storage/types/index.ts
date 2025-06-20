@@ -1,3 +1,4 @@
+// ===== COMMON TYPES =====
 export type Couple = {
   bride: string;
   groom: string;
@@ -9,6 +10,7 @@ export type HeroType = {
   image: string;
 }
 
+// ===== HOME FEATURE =====
 export type Venue = {
   name: string;
   location: string;
@@ -49,22 +51,40 @@ export type HomeData = {
   announcement: string;
 }
 
+export type HomeState = {
+  data: HomeData | null;
+  loading: boolean;
+  error: string | null;
+}
+
+// ===== OUR STORY FEATURE =====
+export type ImageSection = {
+  backImage: string;
+  frontImage: string;
+}
+
+export type Quote = {
+  text1: string;
+  text2: string;
+  link: string;
+}
+
 export type OurStoryData = {
   topImage: string;
   title: string;
   story1: string;
   story2: string;
-  imageSection: {
-    backImage: string;
-    frontImage: string;    
-  }
-  quote: {
-    text1: string;
-    text2: string;
-    link: string;
-  }
+  imageSection: ImageSection;
+  quote: Quote;
 }
 
+export type OurStoryState = {
+  data: OurStoryData | null;
+  loading: boolean;
+  error: string | null;
+}
+
+// ===== DETAILS FEATURE =====
 export type Invitation = {
   text: string;
   buttonText: string;
@@ -117,6 +137,50 @@ export type DetailsBodyProps = {
   eventDetails: EventDetails;
   travelStay: TravelStay;
   registry: RegistryDetails;
+}
+
+export type DetailsState = {
+  data: {
+    hero: HeroType;
+    invitation: Invitation;
+    galleryImage: string;
+    eventDetails: EventDetails;
+    travelStay: TravelStay;
+    registry: RegistryDetails;
+  } | null;
+  loading: boolean;
+  error: string | null;
+}
+
+// ===== RSVP FEATURE =====
+// Base guest type for API and storage
+export type Guest = {
+  id: string;
+  name: string;
+  attending: boolean;
+}
+
+// Extended type for form state management
+export type FormGuest = {
+  id: number; // Temporary ID for React keys
+  name: string;
+  attending: boolean | null; // Null means not selected yet
+}
+
+export type RSVPData = {
+  id?: string;
+  name: string;
+  email: string;
+  guests: Guest[];
+  message: string;
+  submittedAt?: string;
+}
+
+export type RSVPState = {
+  data: RSVPData | null;
+  loading: boolean;
+  error: string | null;
+  success: boolean;
 }
 
 

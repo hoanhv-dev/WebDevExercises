@@ -1,7 +1,5 @@
 import OurStoryBody from "../components/OurStoryBody";
 import { useGetOurStoryQuery } from "../services/api";
-import { useSelector } from "react-redux";
-import { selectOurStoryData } from "../storage/selectors/ourStorySelector";
 import type { OurStoryData } from "../storage/types";
 
 // Default data in case API fails
@@ -22,27 +20,11 @@ const defaultOurStoryData: OurStoryData = {
 };
 
 export default function OurStory() {
-  const { isLoading, isError } = useGetOurStoryQuery(undefined);
-  const ourStoryData = useSelector(selectOurStoryData);
+const { data: ourStoryData} = useGetOurStoryQuery(undefined);
+  
+  // Use the fetched data if available, otherwise use default data
+  const storyData: OurStoryData = ourStoryData || defaultOurStoryData;
 
-  // Merge default data with fetched data
-  const storyData: OurStoryData = {
-    ...defaultOurStoryData,
-    ...(ourStoryData || {})
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="animate-pulse text-xl">Loading our story...</div>
-      </div>
-    );
-  }
-
-
-  if (isError) {
-    console.error('Error loading our story data');
-  }
 
   return (
     <div className="pt-16 md:pt-20">

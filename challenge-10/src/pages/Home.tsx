@@ -1,30 +1,59 @@
-import { useGetHomeQuery } from '../services/api';
 import HomeBody from "../components/HomeBody";
-import { selectHomeData } from "../storage/selectors/homeSelectors";
+import { selectHomeData } from "../features/Home/storage/selectors/homeSelectors";
 import { useAppSelector } from '../hooks/hooks';
 import Hero from '../components/Hero';
-import type { WeddingItems } from '../storage/types';
+import type { HomeData } from '../storage/types';
+
+// Default data in case API fails
+const defaultHomeData: HomeData = {
+  couple: {
+    bride: 'Jane',
+    groom: 'John',
+    initials: 'J&J'
+  },
+  hero: {
+    title: 'Jane & John',
+    image: '/images/hero.jpg'
+  },
+  wedding: {
+    backgroundImage: '/images/wedding-bg.jpg',
+    subtitle: 'We are getting married!',
+    date: 'June 10, 2023',
+    time: '4:00 PM',
+    venue: {
+      name: 'Grand Ballroom',
+      location: '123 Main St, San Francisco, CA'
+    },
+    items: {
+      item1: 'Our Story',
+      item2: 'Wedding Details',
+      item3: 'Gallery',
+      item4: 'RSVP',
+      img1: '/images/our-story.jpg',
+      img2: '/images/details.jpg',
+      img3: '/images/gallery.jpg',
+      img4: '/images/rsvp.jpg'
+    },
+    registry: {
+      img: '/images/gift.jpg',
+      title: 'Our Registry',
+      subtitle: 'Your presence is present enough',
+      link: '/registry'
+    }
+  },
+  announcement: 'Save the date for our wedding celebration!'
+};
 
 export default function Home() {
-  const { isLoading, isError } = useGetHomeQuery(undefined);
+
   const homeData = useAppSelector(selectHomeData);
+  
+  const data = homeData || defaultHomeData;
+  if (!data) return <div className="flex items-center justify-center h-screen">No data available</div>;
 
-  if (isLoading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
-  if (isError || !homeData) return <div className="flex items-center justify-center h-screen text-red-500">Error loading data</div>;
-
-  const {
-    wedding: {
-      backgroundImage = '',
-      subtitle = '',
-      date = '',
-      venue = { name: '', location: '' },
-      registry = { img: '', title: '', subtitle: '', link: '' },
-      items: weddingItems = {
-        item1: '', item2: '', item3: '', item4: '',
-        img1: '', img2: '', img3: '', img4: ''
-      } as WeddingItems
-    } = {} 
-  } = homeData;
+  // Extract the data we need for the HomeBody component
+  const { wedding, hero } = data;
+  const { backgroundImage, subtitle, date, venue, registry, items: weddingItems } = wedding;
 
   const gridItems = [
     { to: "/our-story", imgKey: "img1" as const, itemKey: "item1" as const, alt: "Our Story" },
@@ -35,7 +64,7 @@ export default function Home() {
 
   return (
     <div className="pt-16 md:pt-20">
-      <Hero hero={homeData.hero} />
+      <Hero hero={hero} />
       <HomeBody 
         backgroundImage={backgroundImage}
         subtitle={subtitle}
