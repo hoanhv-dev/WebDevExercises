@@ -71,7 +71,7 @@ export default function Review() {
     infinite: true,
     autoplay: true,
     autoplaySpeed: 2000,
-    slidesToShow: 5,
+    slidesToShow: 3,
     slidesPerRow: 1,
     slidesToScroll: 1,
     centerMode: true,
@@ -86,14 +86,14 @@ export default function Review() {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 3,
           centerPadding: "40px",
         },
       },
       {
         breakpoint: 768,
         settings: {
-          slidesToShow: 5,
+          slidesToShow: 3,
           centerPadding: "30px",
         },
       },
@@ -109,7 +109,7 @@ export default function Review() {
 
   return (
     <>
-      <div className="mt-16 overflow-hidden screen-max-width">
+      <div className="mt-3 md:mt-10 overflow-hidden screen-max-width">
         <div className="text-center m-10 flex flex-col sm:flex-row justify-between items-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 sm:mb-0">
             OUR HAPPY CUSTOMERS

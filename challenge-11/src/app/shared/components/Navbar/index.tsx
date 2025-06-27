@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Search, User, ChevronDown, Menu, X } from "lucide-react";
 import CartDropdown from "../CartDropdown";
+import { useAuth } from "@/app/shared/providers/AuthProvider";
+import { logout } from "@/app/shared/serverActions/auth.actions";
+import { useRouter } from "next/navigation";
 
 interface ShopCategory {
   title: string;
@@ -16,6 +19,8 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { user, loading, setUser } = useAuth();
+  const router = useRouter();
 
   const shopCategories: ShopCategory[] = [
     {
@@ -50,6 +55,24 @@ export default function Navbar() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleLogout = async () => {
+    try {
+      const result = await logout();
+      if (result?.success) {
+        setUser(null);
+        router.push('/');
+      } else {
+        console.error("Logout failed: No success response");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("user", user);
+  }, [user]);
+
   return (
     <nav className="sticky top-0 z-50 bg-white w-full border-b border-gray-100 px-8">
       <div className="mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +87,7 @@ export default function Navbar() {
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               <div
-                className="relative"
+                className="relative py-3 -my-3 px-2 -mx-2"
                 ref={dropdownRef}
                 onMouseEnter={() => setIsShopOpen(true)}
                 onMouseLeave={() => setIsShopOpen(false)}
@@ -75,7 +98,7 @@ export default function Navbar() {
                 >
                   Shop
                   <ChevronDown
-                    className={`ml-1 h-4 w-4 transition-transform ${
+                    className={` ml-1 mr-3 h-4 w-4 transition-transform hover:cursor-pointer ${
                       isShopOpen ? "rotate-180" : ""
                     }`}
                   />
@@ -107,7 +130,7 @@ export default function Navbar() {
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-gray-600 hover:text-gray-900 text-base font-medium"
+                  className="text-gray-600 hover:text-gray-900 text-base font-medium "
                 >
                   {link.name}
                 </Link>
@@ -125,20 +148,62 @@ export default function Navbar() {
               className="bg-[#F0F0F0] block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-black focus:border-black"
             />
           </div>
+
           {/* Right side icons */}
           <div className="flex items-center space-x-6">
-            {/* Search */}
-
             {/* Cart */}
             <div className="relative">
               <CartDropdown />
             </div>
 
             {/* User */}
-            <button className="text-gray-600 hover:text-gray-900 hover:cursor-pointer">
-              <User className="h-6 w-6" />
-              <span className="sr-only">User</span>
-            </button>
+            {loading ? (
+              <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse" />
+            ) : user ? (
+              <div className="relative group cursor-pointer w-10">
+                <button
+                  className="flex items-center space-x-1 text-gray-600 hover:text-gray-900"
+                  onClick={() => router.push("/profile")}
+                >
+                  <User className="h-6 w-6" />
+                  <span className="hidden md:inline text-sm font-medium">
+                    {user.name}
+                  </span>
+                </button>
+
+                <div className="absolute right-0 w-full h-2 bg-transparent" />
+
+                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">
+                  <div className="py-1" role="menu" aria-orientation="vertical">
+                    <Link
+                      href="/profile"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      My Profile
+                    </Link>
+                    <Link
+                      href="/orders"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Orders
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <Link href="/login" className="text-gray-600 hover:text-gray-900">
+                <User className="h-6 w-6" />
+              </Link>
+            )}
 
             {/* Mobile menu button */}
             <div className="md:hidden">
@@ -177,21 +242,29 @@ export default function Navbar() {
         <div className={`md:hidden ${isMobileMenuOpen ? "block" : "hidden"}`}>
           <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-100 ">
             <div className="px-3 py-2">
-              <button 
+              <button
                 className="w-full flex items-center justify-between text-gray-700 hover:text-gray-900 hover:cursor-pointer"
                 onClick={() => setIsMobileShopOpen(!isMobileShopOpen)}
               >
                 <span>Shop</span>
-                <ChevronDown 
-                  className={`h-4 w-4 transition-transform ${isMobileShopOpen ? 'rotate-180' : ''}`} 
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 transition-transform ${
+                    isMobileShopOpen ? "rotate-180" : ""
+                  }`}
                 />
               </button>
-              <div className={`mt-2 pl-4 space-y-2 overflow-hidden transition-all duration-200 ${isMobileShopOpen ? 'max-h-60' : 'max-h-0'}`}>
+              <div
+                className={`mt-2 pl-4 space-y-2 overflow-hidden transition-all duration-200 ${
+                  isMobileShopOpen ? "max-h-60" : "max-h-0"
+                }`}
+              >
                 {shopCategories.map((category) => (
                   <Link
                     key={category.title}
                     href={category.href}
-                    className="block px-3 py-2 text-gray-600 hover:text-gray-900"
+                    className={`block px-3 py-2 text-gray-600 hover:text-gray-900 ${
+                      category.title === "On Sale" ? "pr-6" : "" // Add extra right padding for "On Sale"
+                    }`}
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       setIsMobileShopOpen(false);

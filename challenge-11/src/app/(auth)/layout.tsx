@@ -3,9 +3,7 @@
 import React from 'react';
 import Navbar from '@/app/shared/components/Navbar';
 import Footer from '@/app/shared/components/Footer';
-import { CartProvider } from '@/context/CartContext';
-import Review from '@/app/(auth)/(home)/components/Review';
-
+import { CartProvider } from '@/app/shared/context/CartContext';
 export default function AuthLayout({
   children,
 }: {
@@ -18,7 +16,6 @@ export default function AuthLayout({
         <main className="flex-grow mb-20">
           {children}
         </main>
-        <Review />
         <Footer />
       </div>
     </CartProvider>

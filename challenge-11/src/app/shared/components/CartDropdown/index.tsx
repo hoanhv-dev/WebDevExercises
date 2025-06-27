@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useCart } from "@/context/CartContext";
+import { useCart } from "@/app/shared/context/CartContext";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -47,7 +47,7 @@ export default function CartDropdown() {
 
   return (
     <div className="group relative">
-      <div className="relative">
+      <div className="relative p-2 m-2">
         <Link href="/cart">
           <svg
             xmlns="http://www.w3.org/2000/svg"
