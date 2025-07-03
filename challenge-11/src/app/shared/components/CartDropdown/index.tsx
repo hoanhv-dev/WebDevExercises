@@ -48,7 +48,7 @@ export default function CartDropdown() {
   return (
     <div className="group relative">
       <div className="relative p-2 m-2">
-        <Link href="/cart">
+        <Link href="/orders">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -206,10 +206,10 @@ export default function CartDropdown() {
                 </div>
                 <div className="space-y-2">
                   <Link
-                    href="/cart"
+                    href="/orders"
                     className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 w-full"
                   >
-                    View Cart
+                    View Orders
                   </Link>
                   <Link
                     href="/checkout"

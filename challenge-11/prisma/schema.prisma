@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Product {
-  id             Int    @id(map: "Product_pkey") @default(autoincrement())
+  id             Int         @id(map: "Product_pkey") @default(autoincrement())
   name           String
   price          Float
   original_price Float?
@@ -17,6 +17,9 @@ model Product {
   rating         Float
   review_count   Int
   discount       Int?
+  orderItems     OrderItem[]
+  createdAt      DateTime @default(now()) 
+  updatedAt      DateTime @updatedAt 
 
   @@map("products")
 }
@@ -26,8 +29,77 @@ model User {
   name      String
   email     String   @unique
   password  String
+  phone     String   @default("")
+  addresses Address[]
+  orders    Order[]
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
+}
+
+model Address {
+  id              String   @id @default(uuid())
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
+  fullName        String
+  phone           String
+  street          String
+  city            String
+  ward            String
+  isDefault       Boolean  @default(false)
+  shippingOrders  Order[]  @relation("ShippingAddress")
+  billingOrders   Order[]  @relation("BillingAddress")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, id])
+  @@map("addresses")
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum DeliveryStatus {
+  PROCESSING
+  SHIPPED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  orderNumber     Int           @default(autoincrement())
+  user            User          @relation(fields: [userId], references: [id])
+  userId          String
+  shippingAddress Address       @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+  shippingAddressId String
+  billingAddress  Address?      @relation("BillingAddress", fields: [billingAddressId], references: [id])
+  billingAddressId String?
+  totalValue      Float
+  paymentStatus   PaymentStatus @default(PENDING)
+  deliveryStatus  DeliveryStatus @default(PROCESSING)
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+  orderItems      OrderItem[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String   @id @default(uuid())
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product  @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  price     Float
+  
+  @@map("order_items")
 }

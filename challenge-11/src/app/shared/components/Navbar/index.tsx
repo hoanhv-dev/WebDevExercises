@@ -2,11 +2,18 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { Search, User, ChevronDown, Menu, X } from "lucide-react";
+import {
+  ShoppingCart,
+  Search,
+  User,
+  Menu,
+  X,
+  ChevronDown,
+  LogOut,
+} from "lucide-react";
 import CartDropdown from "../CartDropdown";
 import { useAuth } from "@/app/shared/providers/AuthProvider";
-import { logout } from "@/app/shared/serverActions/auth.actions";
-import { useRouter } from "next/navigation";
+  import { signOut, useSession } from "next-auth/react";
 
 interface ShopCategory {
   title: string;
@@ -20,7 +27,8 @@ export default function Navbar() {
   const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { user, loading, setUser } = useAuth();
-  const router = useRouter();
+
+  const { data: session, status } = useSession();
 
   const shopCategories: ShopCategory[] = [
     {
@@ -55,23 +63,25 @@ export default function Navbar() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleLogout = async () => {
-    try {
-      const result = await logout();
-      if (result?.success) {
-        setUser(null);
-        router.push('/');
-      } else {
-        console.error("Logout failed: No success response");
-      }
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
+  const getUserInitials = (name: string | null | undefined) => {
+    if (!name) return "U";
+    const names = name.split(" ");
+    if (names.length === 1) return names[0].charAt(0).toUpperCase();
+    return (
+      names[0].charAt(0) + names[names.length - 1].charAt(0)
+    ).toUpperCase();
   };
 
   useEffect(() => {
-    console.log("user", user);
-  }, [user]);
+    if (status === "authenticated" && session?.user) {
+      setUser({
+        id: session.user.id || "",
+        name: session.user.name || "",
+        email: session.user.email || "",
+        image: session.user.image || "",
+      });
+    }
+  }, [session, status, setUser]);
 
   return (
     <nav className="sticky top-0 z-50 bg-white w-full border-b border-gray-100 px-8">
@@ -145,12 +155,12 @@ export default function Navbar() {
             <input
               type="text"
               placeholder="Search for products..."
-              className="bg-[#F0F0F0] block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-black focus:border-black"
+              className="bg-[#F0F0F0] block w-full pl-10 pr-2 py-2 border border-gray-300 rounded-full text-sm placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-black focus:border-black"
             />
           </div>
 
           {/* Right side icons */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
             {/* Cart */}
             <div className="relative">
               <CartDropdown />
@@ -158,46 +168,74 @@ export default function Navbar() {
 
             {/* User */}
             {loading ? (
-              <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse" />
+              <div className="h-20 w-20 rounded-full bg-gray-200 animate-pulse" />
             ) : user ? (
-              <div className="relative group cursor-pointer w-10">
-                <button
-                  className="flex items-center space-x-1 text-gray-600 hover:text-gray-900"
-                  onClick={() => router.push("/profile")}
-                >
-                  <User className="h-6 w-6" />
-                  <span className="hidden md:inline text-sm font-medium">
-                    {user.name}
-                  </span>
-                </button>
+              <div className="relative group">
+                <div className="flex items-center space-x-2 cursor-pointer">
+                  <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                    <span className="text-gray-700 font-medium">
+                      {getUserInitials(user.name)}
+                    </span>
+                  </div>
+                  <div className="hidden md:flex flex-col items-start">
+                    <span className="text-sm font-medium">
+                      {user.name || "Account"}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {user.email || "View account"}
+                    </span>
+                  </div>
+                  <ChevronDown className="h-4 w-4 text-gray-500 hidden md:block" />
+                </div>
 
-                <div className="absolute right-0 w-full h-2 bg-transparent" />
-
-                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden group-hover:block">
-                  <div className="py-1" role="menu" aria-orientation="vertical">
-                    <Link
-                      href="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                    >
-                      My Profile
-                    </Link>
-                    <Link
-                      href="/orders"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                    >
-                      Orders
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      role="menuitem"
-                    >
-                      Logout
-                    </button>
+                {/* Dropdown Menu */}
+                <div className="absolute right-0 mt-2 w-72 rounded-xl shadow-lg bg-white border border-gray-200 focus:outline-none hidden group-hover:block z-50">
+                  <div>
+                    <div className="px-4 py-3 border-b border-gray-400 bg-[#F0F0F0] rounded-t-xl flex flex-row gap-5">
+                      <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                        <span className="text-gray-700 font-medium">
+                          {getUserInitials(user.name)}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold ">
+                          {user.name || "Account"}
+                        </p>
+                        <p className="text-xs text-black truncate">
+                          {user.email || "View account"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="px-4 py-2 border-b border-gray-400">
+                      <Link
+                        href="/profile"
+                        className="w-full text-left text-sm text-black hover:bg-gray-100 px-2 py-1.5 rounded flex items-center"
+                      >
+                        <User className="h-4 w-4 text-gray-500 mr-2" />
+                        Profile
+                      </Link>
+                      <Link
+                        href="/orders"
+                        className="w-full text-left text-sm text-black hover:bg-gray-100 px-2 py-1.5 rounded flex items-center"
+                      >
+                        <ShoppingCart className="h-4 w-4 text-gray-500 mr-2" />
+                        <p>Orders</p>
+                      </Link>
+                    </div>
+                    <div className="px-4 py-2">
+                      <Link
+                        onClick={() => signOut()}
+                        href="/login"
+                        className="w-full text-left text-sm text-black hover:bg-gray-100 px-2 py-1.5 rounded flex items-center"
+                      >
+                        <LogOut className="h-4 w-4 text-gray-500 mr-2" />
+                        Logout
+                      </Link>
+                    </div>
                   </div>
                 </div>
+
+                <div className="absolute right-0 w-full h-2 bg-transparent" />
               </div>
             ) : (
               <Link href="/login" className="text-gray-600 hover:text-gray-900">
